@@ -1,10 +1,14 @@
+---
+const { frontmatter } = Astro.props
+---
+
 <html lang='en'>
   <head>
     <meta charset='utf-8' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta name='viewport' content='width=device-width' />
     <meta name='generator' content={Astro.generator} />
-    <title>Meshgarden</title>
+    <title>{frontmatter.title} | Meshgarden</title>
   </head>
   <style is:global>
     h1 {
@@ -17,6 +21,7 @@
     }
   </style>
   <body>
+    <h1 class="mb-3">{frontmatter.title}</h1>
     <slot />
   </body>
 </html>
