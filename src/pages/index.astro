@@ -1,8 +1,14 @@
 ---
 import dayjs from "dayjs";
-
 import { getCollection } from 'astro:content'
-const posts = await getCollection('posts')
+
+const LAST_POSTS_COUNT = 5;
+
+let posts = await getCollection('posts')
+posts = posts
+  .sort((a, b) => new Date (b.data.date).valueOf() - new Date (a.data.date).valueOf())
+	.slice(0, LAST_POSTS_COUNT)
+
 ---
 
 <html lang="en">
@@ -15,7 +21,7 @@ const posts = await getCollection('posts')
 	</head>
 	<body>
 		<h1 class="mb-3">meshgarden</h1>
-		<h2 class="mb-2">Last 10 posts:</h2>
+		<h2 class="mb-2">Last {LAST_POSTS_COUNT} posts:</h2>
 		<ul>
 			{
 				posts.slice(0, 10).map((p) => (
