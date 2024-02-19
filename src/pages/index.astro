@@ -1,5 +1,6 @@
 ---
-const posts = await Astro.glob('./leaves/*.md');
+import { getCollection } from 'astro:content'
+const posts = await getCollection('posts')
 ---
 
 <html lang="en">
@@ -17,7 +18,7 @@ const posts = await Astro.glob('./leaves/*.md');
 			{
 				posts.slice(0, 10).map((p) => (
 					<li>
-						<a class="underline" href={p.url}>{p.frontmatter.title}</a>
+						<a class="underline" href={`/blog/${p.slug}`}>{p.data.title}</a>
 					</li>
 				))
 			}
