@@ -1,4 +1,6 @@
 ---
+import dayjs from "dayjs";
+
 import { getCollection } from 'astro:content'
 const posts = await getCollection('posts')
 ---
@@ -19,6 +21,7 @@ const posts = await getCollection('posts')
 				posts.slice(0, 10).map((p) => (
 					<li>
 						<a class="underline" href={`/blog/${p.slug}`}>{p.data.title}</a>
+						<span>({dayjs(p.data.date).format("MMM DD, YYYY")})</span>
 					</li>
 				))
 			}

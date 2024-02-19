@@ -1,4 +1,6 @@
 ---
+import dayjs from "dayjs";
+
 const { frontmatter } = Astro.props
 ---
 
@@ -21,7 +23,8 @@ const { frontmatter } = Astro.props
     }
   </style>
   <body>
-    <h1 class="mb-3">{frontmatter.title}</h1>
+    <h1 class="pb-2 mb-2 border-b">{frontmatter.title}</h1>
+    <i class="block mb-4">{dayjs(frontmatter.date).format("MMM DD, YYYY")}</i>
     <slot />
   </body>
 </html>
