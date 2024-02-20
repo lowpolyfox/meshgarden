@@ -1,13 +1,13 @@
 ---
 import { getCollection } from 'astro:content'
-import Post from "./../../layouts/Post.astro"
+import Post from './../../layouts/Post.astro'
 import { TAG_ROUTE } from '@/src/routes'
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts')
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: { post }
   }))
 }
 
@@ -19,7 +19,10 @@ const { Content } = await post.render()
   <div class="my-3 flex items-center gap-2">
     {
       post.data.tags.map((tag) => (
-        <a href={`${TAG_ROUTE}/${tag}`} class='border border-black bg-black text-white hover:bg-white hover:text-black transition-colors px-1.5 py-0.5 pb-1 text-sm'>
+        <a
+          href={`${TAG_ROUTE}/${tag}`}
+          class="border border-black bg-black px-1.5 py-0.5 pb-1 text-sm text-white transition-colors hover:bg-white hover:text-black"
+        >
           {tag}
         </a>
       ))

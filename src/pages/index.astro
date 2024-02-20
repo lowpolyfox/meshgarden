@@ -1,49 +1,50 @@
 ---
-import dayjs from "dayjs";
+import dayjs from 'dayjs'
+import { ViewTransitions } from 'astro:transitions'
 import { getCollection } from 'astro:content'
-import { BLOG_ROUTE } from "../routes";
+import { BLOG_ROUTE } from '../routes'
 
-const BLOG_META_DESCRIPTION = 
-  `
+const BLOG_META_DESCRIPTION = `
  ____ ____ ____ ____ 
 ||M |||E |||S |||H ||
 ||__|||__|||__|||__||
 |/__\\|/__\\|/__\\|/__\\|
 
 `
-const LAST_POSTS_COUNT = 5;
+const LAST_POSTS_COUNT = 5
 
 let posts = await getCollection('posts')
 posts = posts
-  .sort((a, b) => new Date (b.data.date).valueOf() - new Date (a.data.date).valueOf())
-	.slice(0, LAST_POSTS_COUNT)
-
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .slice(0, LAST_POSTS_COUNT)
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name='description' content={BLOG_META_DESCRIPTION} />
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={BLOG_META_DESCRIPTION} />
     <!-- <meta property='og:image' content='TODO: add Homepage's meta image' /> -->
-		<title>meshgarden, by Alan Maldonado</title>
-	</head>
-	<body>
-		<h1 class="mb-3">meshgarden</h1>
-		<h2 class="mb-2">Last {LAST_POSTS_COUNT} posts:</h2>
-		<ul>
-			{
-				posts.slice(0, 10).map((p) => (
-					<li>
-						<a class="underline" href={`${BLOG_ROUTE}/${p.slug}`}>
-							{p.data.title}
-						</a>
-						<span>({dayjs(p.data.date).format("MMM DD, YYYY")})</span>
-					</li>
-				))
-			}
-		</ul>
-	</body>
+    <title>meshgarden, by Alan Maldonado</title>
+    <ViewTransitions />
+  </head>
+  <body>
+    <h1 class="mb-3">meshgarden</h1>
+    <h2 class="mb-2">Last {LAST_POSTS_COUNT} posts:</h2>
+    <ul>
+      {
+        posts.slice(0, 10).map((p) => (
+          <li>
+            <a class="underline" href={`${BLOG_ROUTE}/${p.slug}`}>
+              {p.data.title}
+            </a>
+            <span>({dayjs(p.data.date).format('MMM DD, YYYY')})</span>
+          </li>
+        ))
+      }
+    </ul>
+  </body>
 </html>
