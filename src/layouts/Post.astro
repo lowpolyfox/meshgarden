@@ -1,41 +1,43 @@
 ---
-import dayjs from "dayjs";
-import { ViewTransitions } from "astro:transitions";
-import { HOMEPAGE_ROUTE } from "./../routes"
+import dayjs from 'dayjs'
+import { ViewTransitions } from 'astro:transitions'
+import { HOMEPAGE_ROUTE } from './../routes'
 
 const { frontmatter } = Astro.props
 ---
 
-<html lang='en'>
+<html lang="en">
   <head>
-    <meta charset='utf-8' />
-    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name='viewport' content='width=device-width' />
-    <meta name='generator' content={Astro.generator} />
-    <meta name='description' content={frontmatter?.description || `${frontmatter.title}, by Alan Maldonado`} />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content={frontmatter?.description || `${frontmatter.title}, by Alan Maldonado`}
+    />
     <!-- <meta property='og:image' content='TODO: add Post Layout meta image' /> -->
     <title>{frontmatter.title} | meshgarden</title>
     <ViewTransitions />
-  </head>
-  <style is:global>
-    h1 {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
+    <style is:global>
+      h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
 
-    body {
-      padding: 2rem;
-    }
-  </style>
+      body {
+        padding: 2rem;
+      }
+    </style></head
+  >
+
   <body>
-    <p class='py-4'>
-      <a class='underline' href={HOMEPAGE_ROUTE}>
-        ◀︎ Back to the homepage
-      </a>
+    <p class="py-4">
+      <a class="underline" href={HOMEPAGE_ROUTE}> ◀︎ Back to the homepage </a>
     </p>
-    <h1 class="pb-2 mb-2 border-b">{frontmatter.title}</h1>
-    <i class="block mb-4">{dayjs(frontmatter.date).format("MMM DD, YYYY")}</i>
+    <h1 class="mb-2 border-b pb-2">{frontmatter.title}</h1>
+    <i class="mb-4 block">{dayjs(frontmatter.date).format('MMM DD, YYYY')}</i>
     <slot />
   </body>
 </html>

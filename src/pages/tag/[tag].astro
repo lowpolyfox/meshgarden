@@ -1,13 +1,12 @@
 ---
-import dayjs from "dayjs";
-import { getCollection } from "astro:content";
-import TagLayout from "../../layouts/TagLayout.astro";
-import { BLOG_ROUTE } from "@/src/routes";
+import dayjs from 'dayjs'
+import { getCollection } from 'astro:content'
+import TagLayout from '../../layouts/TagLayout.astro'
+import { BLOG_ROUTE } from '@/src/routes'
 
 export async function getStaticPaths() {
   let posts = await getCollection('posts')
-  posts = posts
-  .sort((a, b) => new Date (b.data.date).valueOf() - new Date (a.data.date).valueOf())
+  posts = posts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
 
   const tags: string[] = []
   posts.map((post) => {
@@ -18,13 +17,10 @@ export async function getStaticPaths() {
     })
   })
 
-
-  return tags.map((tag) => (
-    {
-      params: { tag },
-      props: { posts: posts.filter((post) => post.data.tags.includes(tag)) },
-    }
-  ))
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { posts: posts.filter((post) => post.data.tags.includes(tag)) }
+  }))
 }
 
 const { tag } = Astro.params
@@ -32,20 +28,19 @@ const { posts } = Astro.props
 ---
 
 <TagLayout tag={tag}>
-  <h1 class="pb-2 mb-2 border-b">Posts by tag</h1>
-  <p class='my-3'>Posts tagged {tag}:</p>
+  <h1 class="mb-2 border-b pb-2">Posts by tag</h1>
+  <p class="my-3">Posts tagged {tag}:</p>
 
-  <ul class='list-inside'>
+  <ul class="list-inside">
     {
       posts.map((post) => (
         <li>
           <a href={`${BLOG_ROUTE}/${post.slug}`} class="underline">
             {post.data.title}
           </a>
-          <span>({dayjs(post.data.date).format("MMM DD, YYYY")})</span>
+          <span>({dayjs(post.data.date).format('MMM DD, YYYY')})</span>
         </li>
       ))
     }
   </ul>
 </TagLayout>
-

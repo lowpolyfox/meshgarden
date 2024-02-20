@@ -1,37 +1,35 @@
 ---
-import { ViewTransitions } from "astro:transitions";
-import { HOMEPAGE_ROUTE } from "../routes";
+import { ViewTransitions } from 'astro:transitions'
+import { HOMEPAGE_ROUTE } from '../routes'
 
 const { tag } = Astro.props
 ---
 
-<html lang='en'>
+<html lang="en">
   <head>
-    <meta charset='utf-8' />
-    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name='viewport' content='width=device-width' />
-    <meta name='generator' content={Astro.generator} />
-    <meta name='description' content={`Posts tagged by: ${tag}`} />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={`Posts tagged by: ${tag}`} />
     <!-- <meta property='og:image' content='TODO: add Tag Layout meta image' /> -->
     <title>{`Posts tagged '${tag}`} | meshgarden</title>
     <ViewTransitions />
-  </head>
-  <style is:global>
-    h1 {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
+    <style is:global>
+      h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
 
-    body {
-      padding: 2rem;
-    }
-  </style>
+      body {
+        padding: 2rem;
+      }
+    </style>
+  </head>
   <body>
-    <p class='py-4'>
-      <a class='underline' href={HOMEPAGE_ROUTE}>
-        ◀︎ Back to the homepage
-      </a>
+    <p class="py-4">
+      <a class="underline" href={HOMEPAGE_ROUTE}> ◀︎ Back to the homepage </a>
     </p>
     <slot />
   </body>
