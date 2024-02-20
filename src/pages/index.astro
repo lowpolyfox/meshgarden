@@ -1,5 +1,6 @@
 ---
 import dayjs from "dayjs";
+import { ViewTransitions } from "astro:transitions";
 import { getCollection } from 'astro:content'
 import { BLOG_ROUTE } from "../routes";
 
@@ -29,6 +30,7 @@ posts = posts
 		<meta name='description' content={BLOG_META_DESCRIPTION} />
     <!-- <meta property='og:image' content='TODO: add Homepage's meta image' /> -->
 		<title>meshgarden, by Alan Maldonado</title>
+		<ViewTransitions />
 	</head>
 	<body>
 		<h1 class="mb-3">meshgarden</h1>
