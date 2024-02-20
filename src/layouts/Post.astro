@@ -2,6 +2,8 @@
 import dayjs from "dayjs";
 
 const { frontmatter } = Astro.props
+
+import { HOMEPAGE_ROUTE } from "../routes.ts"
 ---
 
 <html lang='en'>
@@ -10,7 +12,9 @@ const { frontmatter } = Astro.props
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta name='viewport' content='width=device-width' />
     <meta name='generator' content={Astro.generator} />
-    <title>{frontmatter.title} | Meshgarden</title>
+    <meta name='description' content={frontmatter?.description || `${frontmatter.title}, by Alan Maldonado`} />
+    <!-- <meta property='og:image' content='TODO: add Post Layout meta image' /> -->
+    <title>{frontmatter.title} | meshgarden</title>
   </head>
   <style is:global>
     h1 {
@@ -23,6 +27,15 @@ const { frontmatter } = Astro.props
     }
   </style>
   <body>
+    {
+      Astro.url.pathname !== HOMEPAGE_ROUTE && (
+        <p class='py-4'>
+          <a class='underline' href={HOMEPAGE_ROUTE}>
+            ◀︎ Back to the homepage
+          </a>
+        </p>
+      )
+    }
     <h1 class="pb-2 mb-2 border-b">{frontmatter.title}</h1>
     <i class="block mb-4">{dayjs(frontmatter.date).format("MMM DD, YYYY")}</i>
     <slot />
