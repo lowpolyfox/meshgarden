@@ -1,5 +1,6 @@
 ---
 import dayjs from "dayjs";
+import { ViewTransitions } from "astro:transitions";
 import { HOMEPAGE_ROUTE } from "./../routes"
 
 const { frontmatter } = Astro.props
@@ -14,6 +15,7 @@ const { frontmatter } = Astro.props
     <meta name='description' content={frontmatter?.description || `${frontmatter.title}, by Alan Maldonado`} />
     <!-- <meta property='og:image' content='TODO: add Post Layout meta image' /> -->
     <title>{frontmatter.title} | meshgarden</title>
+    <ViewTransitions />
   </head>
   <style is:global>
     h1 {
