@@ -19,6 +19,12 @@ const { frontmatter } = Astro.props
     />
     <!-- <meta property='og:image' content='TODO: add Post Layout meta image' /> -->
     <title>{frontmatter.title} | meshgarden</title>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Blog by Alan Maldonado"
+      href="/rss.xml"
+    />
     <ViewTransitions />
     <style is:global>
       h1 {

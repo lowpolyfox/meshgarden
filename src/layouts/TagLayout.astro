@@ -15,6 +15,12 @@ const { tag } = Astro.props
     <meta name="description" content={`Posts tagged by: ${tag}`} />
     <!-- <meta property='og:image' content='TODO: add Tag Layout meta image' /> -->
     <title>{`Posts tagged '${tag}`} | meshgarden</title>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Blog by Alan Maldonado"
+      href="/rss.xml"
+    />
     <ViewTransitions />
     <style is:global>
       h1 {
