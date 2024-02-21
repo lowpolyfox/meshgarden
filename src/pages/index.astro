@@ -24,11 +24,31 @@ posts = posts
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      type="text/partytown"
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-2W1N4V5J4Z"></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      gtag('config', 'G-2W1N4V5J4Z')
+    </script>
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={BLOG_META_DESCRIPTION} />
     <!-- <meta property='og:image' content='TODO: add Homepage's meta image' /> -->
     <title>meshgarden, by Alan Maldonado</title>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Blog by Alan Maldonado"
+      href="/rss.xml"
+    />
     <ViewTransitions />
   </head>
   <body>
