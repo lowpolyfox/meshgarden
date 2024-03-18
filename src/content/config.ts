@@ -1,5 +1,10 @@
 import { z, defineCollection } from 'astro:content'
 
+export enum POST_TYPES {
+  text = 'text',
+  photography = 'photography'
+}
+
 const postsCollection = defineCollection({
   type: 'content',
   schema: ({ image }) =>
@@ -8,7 +13,7 @@ const postsCollection = defineCollection({
       date: z.date(),
       description: z.string().optional(),
       tags: z.array(z.string()),
-      postType: z.enum(['text', 'photography']),
+      postType: z.nativeEnum(POST_TYPES),
       photos: z.array(image()).optional()
     })
 })

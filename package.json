@@ -11,13 +11,14 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.5.4",
-    "@astrojs/rss": "^4.0.5",
     "@astrojs/partytown": "^2.0.4",
+    "@astrojs/rss": "^4.0.5",
     "@astrojs/sitemap": "^3.1.0",
     "@astrojs/tailwind": "^5.1.0",
     "astro": "^4.4.0",
     "dayjs": "^1.11.10",
     "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   },
