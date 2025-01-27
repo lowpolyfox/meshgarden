@@ -1,0 +1,56 @@
+---
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import { contentfulClient, type Post } from '../../lib/contentful'
+import type { Asset } from 'contentful'
+import { Image } from 'astro:assets'
+
+export async function getStaticPaths() {
+  const entries = await contentfulClient.getEntries<Post>({
+    content_type: 'post',
+  })
+
+  const pages = entries.items.map((item) => ({
+    params: { slug: item.fields.slug },
+    props: {
+      title: item.fields.title,
+      content: documentToHtmlString(item.fields.content),
+      date: new Date(item.fields.date).toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+      }),
+      images: item.fields.images as Asset[],
+    },
+  }))
+  return pages
+}
+
+const { content, title, date, images } = Astro.props
+---
+
+<html lang="en">
+  <head>
+    <title>{title}</title>
+  </head>
+  <body>
+    <main class="container mx-auto pt-12">
+      <h1 class="text-2xl">{title}</h1>
+      <p class="italic opacity-75">{date}</p>
+      <article set:html={content} />
+      <section class="flex gap-10 overflow-x-scroll">
+        {
+          images.map((img) => (
+            <div class="relative overflow-hidden min-w-[calc(100%-64px)] h-0 pb-[66.67%]">
+              <Image
+                src={img.fields?.file?.url as string}
+                alt={img.fields.title as string}
+                class="absolute inset-0 object-contain w-full h-full"
+                width={1000}
+                height={1000}
+              />
+            </div>
+          ))
+        }
+      </section>
+    </main>
+  </body>
+</html>
