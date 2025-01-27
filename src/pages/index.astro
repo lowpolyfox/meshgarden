@@ -1,11 +1,43 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient, type Post } from '../lib/contentful'
+import { Image } from 'astro:assets'
+import { type Asset } from 'contentful'
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const postEntries = await contentfulClient.getEntries<Post>({
+  content_type: 'post',
+})
+
+const posts = postEntries.items.map((post) => {
+  const { title, slug, date, thumbnail } = post.fields
+  return {
+    title,
+    slug,
+    date,
+    thumbnail: thumbnail as Asset,
+  }
+})
 ---
 
 <Layout>
-	<Welcome />
+  <main class="container mx-auto py-20">
+    <section class="flex items-center gap-4">
+      {
+        posts.map((post) => (
+          <article>
+            <a href={`/posts/${post.slug}/`}>
+              <h2 class="text-2xl mb-3">{post.title}</h2>
+              <Image
+                src={post.thumbnail?.fields?.file?.url as string}
+                alt={post.title}
+                width={300}
+                height={300}
+                class="aspect-[3/2]"
+              />
+            </a>
+          </article>
+        ))
+      }
+    </section>
+  </main>
 </Layout>
