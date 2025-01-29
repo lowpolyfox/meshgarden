@@ -1,56 +1,38 @@
 ---
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import type { Asset, Entry } from 'contentful'
 import { contentfulClient, type Post } from '../../lib/contentful'
-import type { Asset } from 'contentful'
-import { Image } from 'astro:assets'
+import PhotoGallery from '../../components/PhotoGallery'
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 
 export async function getStaticPaths() {
-  const entries = await contentfulClient.getEntries<Post>({
+  const posts = await contentfulClient.getEntries<Post>({
     content_type: 'post',
   })
 
-  const pages = entries.items.map((item) => ({
+  const pages = posts.items.map((item) => ({
     params: { slug: item.fields.slug },
     props: {
       title: item.fields.title,
       content: documentToHtmlString(item.fields.content),
-      date: new Date(item.fields.date).toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      }),
       images: item.fields.images as Asset[],
+      posts: posts.items as Entry<Post>[],
     },
   }))
   return pages
 }
 
-const { content, title, date, images } = Astro.props
+const { title, content, images, posts } = Astro.props
 ---
 
 <html lang="en">
   <head>
-    <title>{title}</title>
+    <title>{`${title} - Photography, Alan Maldonado`}</title>
   </head>
   <body>
-    <main class="container mx-auto pt-12">
-      <h1 class="text-2xl">{title}</h1>
-      <p class="italic opacity-75">{date}</p>
-      <article set:html={content} />
-      <section class="flex gap-10 overflow-x-scroll">
-        {
-          images.map((img) => (
-            <div class="relative overflow-hidden min-w-[calc(100%-64px)] h-0 pb-[66.67%]">
-              <Image
-                src={img.fields?.file?.url as string}
-                alt={img.fields.title as string}
-                class="absolute inset-0 object-contain w-full h-full"
-                width={1000}
-                height={1000}
-              />
-            </div>
-          ))
-        }
-      </section>
+    <main>
+      <PhotoGallery client:only images={images} posts={posts}>
+        <div set:html={content} />
+      </PhotoGallery>
     </main>
   </body>
 </html>
