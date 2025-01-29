@@ -81,7 +81,11 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
             .replace(/(\w+)\s(\d+)/, '$1, $2')
 
           return (
-            <a key={post.sys.id} href={`/posts/${post.fields.slug}`}>
+            <a
+              key={post.sys.id}
+              href={`/posts/${post.fields.slug}`}
+              className="block mb-3"
+            >
               <span>{String(post.fields.title)}</span>
               <span className="block italic text-xs">{formattedDate}</span>
             </a>
@@ -91,6 +95,9 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
       <section
         className="mx-auto flex gap-3 overflow-x-scroll flex-1 h-full items-center"
         ref={containerElement}
+        style={{
+          paddingRight: `${MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX}px`,
+        }}
       >
         {children && (
           <div
