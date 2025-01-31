@@ -1,10 +1,17 @@
 import type { Asset, Entry } from 'contentful'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type MouseEvent,
+} from 'react'
 import type { Post } from '../lib/contentful'
+import { debounce } from '../utils/debounce'
 
 const NAV_WIDTH_IN_PX = 240
 const VERTICAL_PADDING_IN_PX = 40
-const MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX = 60
+const MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX = 80
 const DEBOUNCE_TIMEOUT_IN_MS = 100
 interface Props {
   images: Asset[]
@@ -41,14 +48,6 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
     }
   }
 
-  const debounce = (func: () => void, wait: number) => {
-    let timeout: ReturnType<typeof setTimeout> | null = null
-    return () => {
-      if (timeout) clearTimeout(timeout)
-      timeout = setTimeout(func, wait)
-    }
-  }
-
   useEffect(() => {
     calculatePhotoDimensions()
     const handleResize = debounce(() => {
@@ -61,6 +60,13 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
     }
   }, [])
 
+  const handleImageClick = (event: MouseEvent<HTMLImageElement>) => {
+    event.currentTarget.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    })
+  }
   return (
     <div className="flex h-screen">
       <nav
@@ -93,7 +99,7 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
         })}
       </nav>
       <section
-        className="mx-auto flex gap-3 overflow-x-scroll flex-1 h-full items-center"
+        className="mx-auto flex gap-5 overflow-x-scroll flex-1 h-full items-center"
         ref={containerElement}
         style={{
           paddingRight: `${MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX}px`,
@@ -122,8 +128,9 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
           >
             <img
               src={String(img.fields.file?.url)}
-              alt=""
-              className="absolute inset-0 size-full object-contain"
+              alt={String(img.fields.title) ?? ''}
+              className="absolute inset-0 size-full object-contain cursor-pointer"
+              onClick={handleImageClick}
             />
           </div>
         ))}
