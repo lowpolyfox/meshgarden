@@ -150,11 +150,11 @@ const PhotoGallery = ({ images, posts, children: description }: Props) => {
         ))}
         <div
           className={`absolute inset-0 size-full z-30 bg-white transition-opacity duration-500 
-            ${isLoading ? 'opacity-100 pointer-events-auto' : 'opacity-100 pointer-events-none'}
+            ${isLoading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
           `}
         >
           <div className="relative size-full">
-            <div className="absolute top-1/2 left-[calc(50%+180px)] w-[45px] -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute top-1/2 left-1/2 w-[45px] -translate-x-1/2 -translate-y-1/2">
               <div className="loader" />
             </div>
           </div>
