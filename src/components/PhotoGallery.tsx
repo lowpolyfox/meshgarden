@@ -1,20 +1,29 @@
 import type { Asset, Entry } from 'contentful'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type MouseEvent,
+} from 'react'
 import type { Post } from '../lib/contentful'
+import { debounce } from '../utils/debounce'
 
 const NAV_WIDTH_IN_PX = 240
 const VERTICAL_PADDING_IN_PX = 40
-const MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX = 60
+const MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX = 80
 const DEBOUNCE_TIMEOUT_IN_MS = 100
 interface Props {
   images: Asset[]
   posts: Entry<Post>[]
   children: ReactNode
 }
-const PhotoGallery = ({ images, posts, children }: Props) => {
+const PhotoGallery = ({ images, posts, children: description }: Props) => {
   const containerElement = useRef<HTMLDivElement>(null)
   const [photoWidth, setPhotoWidth] = useState(0)
   const [photoHeight, setPhotoHeight] = useState(0)
+  const [loadedImages, setLoadedImages] = useState<string[]>([])
+  const isLoading = images.length !== loadedImages.length
 
   const calculatePhotoDimensions = () => {
     if (containerElement.current) {
@@ -41,14 +50,6 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
     }
   }
 
-  const debounce = (func: () => void, wait: number) => {
-    let timeout: ReturnType<typeof setTimeout> | null = null
-    return () => {
-      if (timeout) clearTimeout(timeout)
-      timeout = setTimeout(func, wait)
-    }
-  }
-
   useEffect(() => {
     calculatePhotoDimensions()
     const handleResize = debounce(() => {
@@ -61,53 +62,66 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
     }
   }, [])
 
+  const handleImageClick = (event: MouseEvent<HTMLImageElement>) => {
+    if (isLoading) return
+
+    event.currentTarget.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    })
+  }
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen items-start justify-start">
       <nav
-        className="min-h-full bg-white px-4"
+        className="min-h-screen bg-white relative"
         style={{
           width: NAV_WIDTH_IN_PX,
           paddingTop: (window.innerHeight - photoHeight) / 2,
           paddingBottom: (window.innerHeight - photoHeight) / 2,
         }}
       >
-        <h1 className="font-bold mb-4">Photography</h1>
-        {posts.map((post) => {
-          const formattedDate = new Date(String(post.fields.date))
-            .toLocaleDateString('en-US', {
-              month: 'long',
-              year: 'numeric',
-            })
-            .replace(/(\w+)\s(\d+)/, '$1, $2')
+        <div className="absolute inset-4 max-h-full overflow-y-scroll">
+          <h1 className="font-bold mb-4">Photography</h1>
+          {posts.map((post) => {
+            const formattedDate = new Date(String(post.fields.date))
+              .toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric',
+              })
+              .replace(/(\w+)\s(\d+)/, '$1, $2')
 
-          return (
-            <a
-              key={post.sys.id}
-              href={`/posts/${post.fields.slug}`}
-              className="block mb-3"
-            >
-              <span>{String(post.fields.title)}</span>
-              <span className="block italic text-xs">{formattedDate}</span>
-            </a>
-          )
-        })}
+            return (
+              <a
+                key={post.sys.id}
+                href={`/posts/${post.fields.slug}`}
+                className="block mb-3"
+              >
+                <span>{String(post.fields.title)}</span>
+                <span className="block italic text-xs">{formattedDate}</span>
+              </a>
+            )
+          })}
+        </div>
       </nav>
       <section
-        className="mx-auto flex gap-3 overflow-x-scroll flex-1 h-full items-center"
+        className={`relative h-full flex flex-1 items-center gap-5 mx-auto 
+          ${isLoading ? 'overflow-x-hidden' : 'overflow-x-scroll'}
+        `}
         ref={containerElement}
         style={{
           paddingRight: `${MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX}px`,
         }}
       >
-        {children && (
+        {description && (
           <div
-            className="min-w-[360px] h-full "
+            className="min-w-[360px] h-full"
             style={{
               paddingTop: (window.innerHeight - photoHeight) / 2,
               paddingBottom: (window.innerHeight - photoHeight) / 2,
             }}
           >
-            {children}
+            {description}
           </div>
         )}
         {images.map((img) => (
@@ -122,11 +136,29 @@ const PhotoGallery = ({ images, posts, children }: Props) => {
           >
             <img
               src={String(img.fields.file?.url)}
-              alt=""
-              className="absolute inset-0 size-full object-contain"
+              alt={String(img.fields.title) ?? ''}
+              className="absolute inset-0 size-full object-contain cursor-pointer"
+              onClick={handleImageClick}
+              onLoad={() =>
+                setLoadedImages((loadedImages) => [
+                  ...loadedImages,
+                  String(img.fields.file?.url),
+                ])
+              }
             />
           </div>
         ))}
+        <div
+          className={`absolute inset-0 size-full z-30 bg-white transition-opacity duration-500 
+            ${isLoading ? 'opacity-100 pointer-events-auto' : 'opacity-100 pointer-events-none'}
+          `}
+        >
+          <div className="relative size-full">
+            <div className="absolute top-1/2 left-[calc(50%+180px)] w-[45px] -translate-x-1/2 -translate-y-1/2">
+              <div className="loader" />
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   )
