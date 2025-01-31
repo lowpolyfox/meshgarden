@@ -27,6 +27,34 @@ const { title, content, images, posts } = Astro.props
 <html lang="en">
   <head>
     <title>{`${title} - Photography, Alan Maldonado`}</title>
+    <style is:global>
+      .loader {
+        height: 4px;
+        width: 150px;
+        --line-bg: no-repeat linear-gradient(#000 0 0);
+        background: var(--line-bg), var(--line-bg), #fff;
+        background-size: 60% 100%;
+        animation: line-loader 3s infinite;
+        opacity: 0.75;
+      }
+      @keyframes line-loader {
+        0% {
+          background-position:
+            -150% 0,
+            -150% 0;
+        }
+        66.67% {
+          background-position:
+            250% 0,
+            -150% 0;
+        }
+        100% {
+          background-position:
+            250% 0,
+            250% 0;
+        }
+      }
+    </style>
   </head>
   <body>
     <main>
