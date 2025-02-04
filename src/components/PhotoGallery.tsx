@@ -81,7 +81,7 @@ const PhotoGallery = ({ images, posts, children: description }: Props) => {
           paddingBottom: (window.innerHeight - photoHeight) / 2,
         }}
       >
-        <div className="absolute inset-4 max-h-full overflow-y-scroll">
+        <div className="absolute inset-4 max-h-full overflow-y-scroll scrollbar-none">
           <h1 className="font-bold mb-4">Photography</h1>
           {posts.map((post) => {
             const formattedDate = new Date(String(post.fields.date))
@@ -106,7 +106,7 @@ const PhotoGallery = ({ images, posts, children: description }: Props) => {
       </nav>
       <section
         className={`relative h-full flex flex-1 items-center gap-5 mx-auto 
-          ${isLoading ? 'overflow-x-hidden' : 'overflow-x-scroll'}
+          ${isLoading ? 'overflow-x-hidden' : 'overflow-x-scroll scrollbar-none'}
         `}
         ref={containerElement}
         style={{
