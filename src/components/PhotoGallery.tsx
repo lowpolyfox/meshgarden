@@ -4,6 +4,7 @@ import type { Post } from '../lib/contentful'
 import useIsMobile from '../hooks/useIsMobile'
 import DesktopGallery from './Desktop'
 import Mobile from './Mobile'
+import '../../src/styles/global.css'
 
 export interface GalleryProps {
   title: string
