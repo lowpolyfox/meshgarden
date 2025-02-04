@@ -8,6 +8,7 @@ import '../../../src/styles/global.css'
 export async function getStaticPaths() {
   const posts = await contentfulClient.getEntries<Post>({
     content_type: 'post',
+    order: ['-fields.date'],
   })
 
   const pages = posts.items.map((item) => ({
