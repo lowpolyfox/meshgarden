@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
-import { type GalleryProps } from '../PhotoGallery'
-import { debounce } from '../../utils/debounce'
+import { type GalleryProps } from './PhotoGallery'
+import { debounce } from '../utils/debounce'
 
 const NAV_WIDTH_IN_PX = 200
 const VERTICAL_PADDING_IN_PX = 40

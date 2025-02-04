@@ -2,8 +2,8 @@ import type { Asset, Entry } from 'contentful'
 import { type ReactNode } from 'react'
 import type { Post } from '../lib/contentful'
 import useIsMobile from '../hooks/useIsMobile'
-import DesktopGallery from './PhotoGallery/Desktop'
-import Mobile from './PhotoGallery/Mobile'
+import DesktopGallery from './Desktop'
+import Mobile from './Mobile'
 
 export interface GalleryProps {
   title: string

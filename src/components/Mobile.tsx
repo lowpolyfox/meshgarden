@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { GalleryProps } from '../PhotoGallery'
+import type { GalleryProps } from './PhotoGallery'
 
 const Mobile = ({
   title,
