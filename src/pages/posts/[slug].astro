@@ -3,6 +3,7 @@ import type { Asset, Entry } from 'contentful'
 import { contentfulClient, type Post } from '../../lib/contentful'
 import PhotoGallery from '../../components/PhotoGallery'
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import '../../../src/styles/global.css'
 
 export async function getStaticPaths() {
   const posts = await contentfulClient.getEntries<Post>({

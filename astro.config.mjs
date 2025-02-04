@@ -2,15 +2,18 @@
 import { defineConfig } from 'astro/config'
 
 import react from '@astrojs/react'
-import tailwind from '@astrojs/tailwind'
-
 import vercel from '@astrojs/vercel'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  integrations: [react(), tailwind()],
+  integrations: [react()],
 
   image: {
     domains: ['images.ctfassets.net'],
+  },
+
+  vite: {
+    plugins: [tailwindcss()],
   },
 
   adapter: vercel(),
