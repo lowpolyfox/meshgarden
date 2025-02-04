@@ -3,16 +3,19 @@ import type { Asset, Entry } from 'contentful'
 import { contentfulClient, type Post } from '../../lib/contentful'
 import PhotoGallery from '../../components/PhotoGallery'
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import '../../../src/styles/global.css'
 
 export async function getStaticPaths() {
   const posts = await contentfulClient.getEntries<Post>({
     content_type: 'post',
+    order: ['-fields.date'],
   })
 
   const pages = posts.items.map((item) => ({
     params: { slug: item.fields.slug },
     props: {
       title: item.fields.title,
+      date: new Date(String(item.fields.date)),
       content: documentToHtmlString(item.fields.content),
       images: item.fields.images as Asset[],
       posts: posts.items as Entry<Post>[],
@@ -21,7 +24,7 @@ export async function getStaticPaths() {
   return pages
 }
 
-const { title, content, images, posts } = Astro.props
+const { title, content } = Astro.props
 ---
 
 <html lang="en">
@@ -58,7 +61,7 @@ const { title, content, images, posts } = Astro.props
   </head>
   <body>
     <main>
-      <PhotoGallery client:only images={images} posts={posts}>
+      <PhotoGallery client:only {...Astro.props}>
         <div set:html={content} />
       </PhotoGallery>
     </main>
