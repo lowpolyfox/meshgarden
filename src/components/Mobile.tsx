@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { GalleryProps } from './PhotoGallery'
+import { richTextStyles } from '../utils/misc'
 
 const Mobile = ({
   title,
@@ -80,7 +81,7 @@ const Mobile = ({
           <header className="mb-5">
             <h2 className="text-2xl font-bold">{title}</h2>
             <h3 className="mb-2.5">{formattedDate}</h3>
-            {description}
+            <div className={richTextStyles}>{description}</div>
           </header>
           <section className="relative">
             {images.map((img) => (

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { type GalleryProps } from './PhotoGallery'
 import { debounce } from '../utils/debounce'
+import { richTextStyles } from '../utils/misc'
 
 const NAV_WIDTH_IN_PX = 200
 const VERTICAL_PADDING_IN_PX = 40
@@ -125,7 +126,7 @@ const DesktopGallery = ({
         >
           <h1 className="text-2xl font-bold">{title}</h1>
           <h2 className="mb-3">{formattedDate}</h2>
-          {description}
+          <div className={richTextStyles}>{description}</div>
         </div>
         {images.map((img) => (
           <div
