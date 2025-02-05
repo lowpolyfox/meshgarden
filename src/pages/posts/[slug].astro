@@ -31,6 +31,20 @@ const { title, content } = Astro.props
   <head>
     <title>{`${title} - Photography, Alan Maldonado`}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      type="text/partytown"
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-63C3W6XB4Z"></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      gtag('config', 'G-63C3W6XB4Z')
+    </script>
     <style is:global>
       .loader {
         height: 4px;

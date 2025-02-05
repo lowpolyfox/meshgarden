@@ -4,9 +4,17 @@ import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
+import partytown from '@astrojs/partytown'
 
 export default defineConfig({
-  integrations: [react()],
+  integrations: [
+    react(),
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
+    }),
+  ],
 
   image: {
     domains: ['images.ctfassets.net'],
