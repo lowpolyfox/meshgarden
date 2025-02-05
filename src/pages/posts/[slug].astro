@@ -38,9 +38,17 @@ const { title, content } = Astro.props
         --line-bg: no-repeat linear-gradient(#000 0 0);
         background: var(--line-bg), var(--line-bg), #fff;
         background-size: 60% 100%;
-        animation: line-loader 3s infinite;
+        animation: line-loader 5s infinite;
         opacity: 0.75;
       }
+
+      @media screen and (max-width: 1024px) {
+        .loader {
+          height: 4px;
+          width: 100%;
+        }
+      }
+
       @keyframes line-loader {
         0% {
           background-position:
