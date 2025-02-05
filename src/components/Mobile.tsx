@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { GalleryProps } from './PhotoGallery'
-import { richTextStyles } from '../utils/misc'
+import { formatMonthYear, richTextStyles } from '../utils/misc'
+import List from './List'
 
 const Mobile = ({
   title,
@@ -9,17 +10,10 @@ const Mobile = ({
   posts,
   children: description,
 }: GalleryProps) => {
+  const [menuOpen, setMenuOpen] = useState(false)
   const [loadedImages, setLoadedImages] = useState<string[]>([])
   const isLoading = images.length !== loadedImages.length
 
-  const formattedDate = date
-    .toLocaleDateString('en-US', {
-      month: 'long',
-      year: 'numeric',
-    })
-    .replace(/(\w+)\s(\d+)/, '$1, $2')
-
-  const [menuOpen, setMenuOpen] = useState(false)
   useEffect(() => {
     if (menuOpen && document.body.style.overflow !== 'hidden') {
       document.body.style.overflow = 'hidden'
@@ -42,32 +36,7 @@ const Mobile = ({
           >
             less
           </button>
-          <nav>
-            <ul>
-              {posts.map((post) => {
-                const formattedDate = new Date(String(post.fields.date))
-                  .toLocaleDateString('en-US', {
-                    month: 'long',
-                    year: 'numeric',
-                  })
-                  .replace(/(\w+)\s(\d+)/, '$1, $2')
-
-                return (
-                  <li key={post.sys.id}>
-                    <a
-                      href={`/posts/${post.fields.slug}`}
-                      className="inline-block mb-3"
-                    >
-                      <span>{String(post.fields.title)}</span>
-                      <span className="block italic text-xs">
-                        {formattedDate}
-                      </span>
-                    </a>
-                  </li>
-                )
-              })}
-            </ul>
-          </nav>
+          <List posts={posts} />
         </div>
       </aside>
       <div
@@ -80,7 +49,9 @@ const Mobile = ({
         <div className="p-5 pb-0">
           <header className="mb-5">
             <h2 className="text-2xl font-bold">{title}</h2>
-            <h3 className="mb-2.5">{formattedDate}</h3>
+            <h3 className="mb-2.5">
+              {formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
+            </h3>
             <div className={richTextStyles}>{description}</div>
           </header>
           <section className="relative">
