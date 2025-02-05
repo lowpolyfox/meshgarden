@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { type GalleryProps } from './PhotoGallery'
 import { debounce } from '../utils/debounce'
+import { formatMonthYear, richTextStyles } from '../utils/misc'
+import List from './List'
 
 const NAV_WIDTH_IN_PX = 200
 const VERTICAL_PADDING_IN_PX = 40
@@ -67,16 +69,9 @@ const DesktopGallery = ({
     })
   }
 
-  const formattedDate = date
-    .toLocaleDateString('en-US', {
-      month: 'long',
-      year: 'numeric',
-    })
-    .replace(/(\w+)\s(\d+)/, '$1, $2')
-
   return (
     <div className="flex h-screen items-start justify-start">
-      <nav
+      <aside
         className="min-h-screen bg-white relative"
         style={{
           width: NAV_WIDTH_IN_PX,
@@ -86,27 +81,9 @@ const DesktopGallery = ({
       >
         <div className="absolute inset-5 max-h-full overflow-y-scroll scrollbar-none">
           <h1 className="font-bold mb-4">Photography</h1>
-          {posts.map((post) => {
-            const formattedDate = new Date(String(post.fields.date))
-              .toLocaleDateString('en-US', {
-                month: 'long',
-                year: 'numeric',
-              })
-              .replace(/(\w+)\s(\d+)/, '$1, $2')
-
-            return (
-              <a
-                key={post.sys.id}
-                href={`/posts/${post.fields.slug}`}
-                className="block mb-3"
-              >
-                <span>{String(post.fields.title)}</span>
-                <span className="block italic text-xs">{formattedDate}</span>
-              </a>
-            )
-          })}
+          <List posts={posts} />
         </div>
-      </nav>
+      </aside>
       <section
         className={`relative h-full flex flex-1 items-center gap-5 mx-auto 
           ${isLoading ? 'overflow-x-hidden' : 'overflow-x-scroll scrollbar-none'}
@@ -124,8 +101,10 @@ const DesktopGallery = ({
           }}
         >
           <h1 className="text-2xl font-bold">{title}</h1>
-          <h2 className="mb-3">{formattedDate}</h2>
-          {description}
+          <h2 className="mb-3">
+            {formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
+          </h2>
+          <div className={richTextStyles}>{description}</div>
         </div>
         {images.map((img) => (
           <div
