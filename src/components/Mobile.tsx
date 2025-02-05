@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { GalleryProps } from './PhotoGallery'
 import { formatMonthYear, richTextStyles } from '../utils/misc'
 import List from './List'
+import { useOnClickOutside } from '../hooks/useOnClickOutside'
 
 const Mobile = ({
   title,
@@ -14,19 +15,24 @@ const Mobile = ({
   const [loadedImages, setLoadedImages] = useState<string[]>([])
   const isLoading = images.length !== loadedImages.length
 
+  const { ref: menu } = useOnClickOutside<HTMLDivElement>(() =>
+    setMenuOpen(false),
+  )
+
   useEffect(() => {
-    if (menuOpen && document.body.style.overflow !== 'hidden') {
+    if (menuOpen || isLoading) {
       document.body.style.overflow = 'hidden'
-    } else if (!menuOpen && document.body.style.overflow === 'hidden') {
+    } else {
       document.body.style.overflow = 'scroll'
     }
-  }, [menuOpen])
+  }, [menuOpen, isLoading])
 
   return (
     <div
       className={`relative w-full overflow-hidden ${menuOpen && 'max-h-screen'}`}
     >
       <aside
+        ref={menu}
         className={`min-w-[85%] min-h-full max-h-screen absolute bg-slate-50 transition-[left] duration-300 ${menuOpen ? 'left-0' : 'left-[-85%]'}`}
       >
         <div className="relative size-full overflow-y-auto scrollbar-none p-5">
@@ -74,7 +80,7 @@ const Mobile = ({
               </div>
             ))}
             <div
-              className={`absolute inset-0 size-full z-30 bg-white transition-opacity duration-500 
+              className={`fixed inset-0 size-full z-30 bg-white transition-opacity duration-500 
             ${isLoading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
           `}
             >
