@@ -5,6 +5,7 @@ import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
 import partytown from '@astrojs/partytown'
+import icon from 'astro-icon'
 
 export default defineConfig({
   integrations: [
@@ -14,6 +15,7 @@ export default defineConfig({
         forward: ['dataLayer.push'],
       },
     }),
+    icon(),
   ],
 
   image: {

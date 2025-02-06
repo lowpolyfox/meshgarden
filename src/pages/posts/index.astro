@@ -1,0 +1,71 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { contentfulClient, type Post } from '../../lib/contentful'
+import { Image } from 'astro:assets'
+import { type Asset } from 'contentful'
+import { Icon } from 'astro-icon/components'
+import { formatMonthYear } from '../../utils/misc'
+import '../../styles/global.css'
+
+const postEntries = await contentfulClient.getEntries<Post>({
+  content_type: 'post',
+  order: ['-fields.date'],
+})
+
+const posts = postEntries.items.map((post) => {
+  const { title, slug, date, thumbnail } = post.fields
+  return {
+    title,
+    slug,
+    date,
+    thumbnail: thumbnail as Asset,
+  }
+})
+---
+
+<Layout>
+  <div class="max-w-full mx-auto px-5 lg:px-0 lg:max-w-[91.66%]">
+    <header class="flex items-center justify-between py-5 lg:py-8">
+      <h1 class="text-2xl font-bold">Photography</h1>
+      <div class="flex items-center gap-4">
+        <a
+          href="https://www.instagram.com/meshcollider/"
+          target="_blank"
+          aria-label="Instagram account"
+          class="transition-opacity hover:opacity-75"
+        >
+          <Icon name="instagram" width={24} height={24} />
+        </a>
+      </div>
+    </header>
+    <main>
+      <section class="lg:grid lg:grid-cols-3 lg:gap-5">
+        {
+          posts.map((post) => (
+            <article>
+              <a
+                href={`/posts/${post.slug}/`}
+                class="block relative mb-5 group lg:mb-0"
+              >
+                <div class="absolute z-[5] inset-0 size-full bg-black/40 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100" />
+                <h1 class="mb-3 text-xl font-medium lg:absolute lg:left-1/2 lg:top-1/2 lg:z-10 lg:mb-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:text-white lg:opacity-0 lg:transition-opacity lg:duration-200 lg:group-hover:opacity-100">
+                  {post.title}
+                  <span class="block text-sm opacity-50 lg:hidden">
+                    {formatMonthYear(post.date)}
+                  </span>
+                </h1>
+                <Image
+                  src={post.thumbnail?.fields?.file?.url as string}
+                  alt={post.title}
+                  width={600}
+                  height={400}
+                  class="aspect-[3/2] transition-all duration-200 group-hover:grayscale"
+                />
+              </a>
+            </article>
+          ))
+        }
+      </section>
+    </main>
+  </div>
+</Layout>
