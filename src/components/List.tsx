@@ -1,17 +1,19 @@
 import type { Entry } from 'contentful'
 import type { Post } from '../lib/contentful'
 import { formatMonthYear } from '../utils/misc'
+import { photographyRoot } from '../routes'
 
 interface Props {
   posts: Entry<Post>[]
+  containerClassName?: string
 }
-const List = ({ posts }: Props) => {
+const List = ({ posts, containerClassName }: Props) => {
   const currentPostSlug = window.location.pathname
     .split('/')
     .filter(Boolean)
     .pop()
   return (
-    <nav>
+    <nav className={containerClassName}>
       <ul>
         {posts.map((post) => {
           const isActive = post.fields.slug === currentPostSlug
@@ -19,7 +21,7 @@ const List = ({ posts }: Props) => {
           return (
             <li key={post.sys.id}>
               <a
-                href={`/posts/${post.fields.slug}`}
+                href={`${photographyRoot}/${post.fields.slug}`}
                 className="inline-block mb-3 transition-opacity hover:opacity-75"
               >
                 <span className={`${isActive && 'font-semibold'}`}>

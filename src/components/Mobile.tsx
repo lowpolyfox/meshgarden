@@ -3,6 +3,7 @@ import type { GalleryProps } from './PhotoGallery'
 import { formatMonthYear, richTextStyles } from '../utils/misc'
 import List from './List'
 import { useOnClickOutside } from '../hooks/useOnClickOutside'
+import { photographyRoot } from '../routes'
 
 const Mobile = ({
   title,
@@ -36,20 +37,25 @@ const Mobile = ({
         className={`min-w-[85%] min-h-full max-h-screen absolute bg-slate-50 transition-[left] duration-300 ${menuOpen ? 'left-0' : 'left-[-85%]'}`}
       >
         <div className="relative size-full overflow-y-auto scrollbar-none p-5">
+          <a className="absolute top-2.5 left-5" href={photographyRoot}>
+            go back
+          </a>
           <button
             className="absolute top-2.5 right-5"
             onClick={() => setMenuOpen(false)}
           >
             less
           </button>
-          <List posts={posts} />
+          <List containerClassName="pt-7" posts={posts} />
         </div>
       </aside>
       <div
         className={`relative min-w-screen transition-[left] duration-300 ${menuOpen ? 'left-[85%]' : 'left-0'}`}
       >
         <div className="px-5 py-2.5 flex items-center justify-between">
-          <h1 className="font-bold">Photography</h1>
+          <h1 className="font-bold">
+            <a href={photographyRoot}>Photography</a>
+          </h1>
           <button onClick={() => setMenuOpen(true)}>more</button>
         </div>
         <div className="p-5 pb-0">

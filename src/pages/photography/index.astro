@@ -6,6 +6,7 @@ import { type Asset } from 'contentful'
 import { Icon } from 'astro-icon/components'
 import { formatMonthYear } from '../../utils/misc'
 import '../../styles/global.css'
+import { photographyRoot } from '../../routes'
 
 const postEntries = await contentfulClient.getEntries<Post>({
   content_type: 'post',
@@ -44,7 +45,7 @@ const posts = postEntries.items.map((post) => {
           posts.map((post) => (
             <article>
               <a
-                href={`/posts/${post.slug}/`}
+                href={`${photographyRoot}/${post.slug}/`}
                 class="block relative mb-5 group lg:mb-0"
               >
                 <div class="absolute z-[5] inset-0 size-full bg-black/40 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100" />

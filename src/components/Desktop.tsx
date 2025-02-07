@@ -3,6 +3,7 @@ import { type GalleryProps } from './PhotoGallery'
 import { debounce } from '../utils/debounce'
 import { formatMonthYear, richTextStyles } from '../utils/misc'
 import List from './List'
+import { photographyRoot } from '../routes'
 
 const NAV_WIDTH_IN_PX = 200
 const VERTICAL_PADDING_IN_PX = 40
@@ -80,7 +81,9 @@ const DesktopGallery = ({
         }}
       >
         <div className="absolute inset-5 max-h-full overflow-y-scroll scrollbar-none">
-          <h1 className="font-bold mb-4">Photography</h1>
+          <h1 className="font-bold mb-4">
+            <a href={photographyRoot}>Photography</a>
+          </h1>
           <List posts={posts} />
         </div>
       </aside>
