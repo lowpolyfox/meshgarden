@@ -82,7 +82,12 @@ const DesktopGallery = ({
       >
         <div className="absolute inset-5 max-h-full overflow-y-scroll scrollbar-none">
           <h1 className="font-bold mb-4">
-            <a href={photographyRoot}>Photography</a>
+            <a
+              className="inline-block relative z-[1] overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] hover:text-[#FBFBFB] after:bg-[#606C38] after:transition-transform after:duration-200 after:translate-y-full hover:after:translate-y-0"
+              href={photographyRoot}
+            >
+              Photography
+            </a>
           </h1>
           <List posts={posts} />
         </div>

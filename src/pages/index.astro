@@ -1,43 +1,60 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import { contentfulClient, type Post } from '../lib/contentful'
-import { Image } from 'astro:assets'
-import { type Asset } from 'contentful'
-
-const postEntries = await contentfulClient.getEntries<Post>({
-  content_type: 'post',
-})
-
-const posts = postEntries.items.map((post) => {
-  const { title, slug, date, thumbnail } = post.fields
-  return {
-    title,
-    slug,
-    date,
-    thumbnail: thumbnail as Asset,
-  }
-})
+import { Icon } from 'astro-icon/components'
+import { photographyRoot } from '../routes'
+import '../styles/global.css'
 ---
 
 <Layout>
-  <main class="container mx-auto py-20">
-    <section class="flex items-center gap-4">
-      {
-        posts.map((post) => (
-          <article>
-            <a href={`/posts/${post.slug}/`}>
-              <h2 class="text-2xl mb-3">{post.title}</h2>
-              <Image
-                src={post.thumbnail?.fields?.file?.url as string}
-                alt={post.title}
-                width={300}
-                height={300}
-                class="aspect-[3/2]"
-              />
-            </a>
+  <div
+    class="flex flex-col h-screen w-full mx-auto px-5 lg:px-0 lg:max-w-[91.66%]"
+  >
+    <header class="flex items-center justify-between py-5 lg:py-8">
+      <h1 class="font-medium">Alan Maldonado</h1>
+      <div class="flex items-center gap-4 ml-auto">
+        <a
+          href="https://www.instagram.com/meshcollider/"
+          target="_blank"
+          aria-label="Instagram account"
+          class="transition-opacity hover:opacity-75"
+        >
+          <Icon name="instagram" width={24} height={24} />
+        </a>
+      </div>
+    </header>
+
+    <main class="flex items-center justify-center basis-full h-full">
+      <section class="basis-full lg:basis-1/2 lg:max-w-[600px]">
+        <header class="text-center mb-6">
+          <p class="mb-3">digital garden growing at a bit-measured pace</p>
+          <p class="font-bold leading-[1]">...</p>
+        </header>
+
+        <section class="flex flex-wrap items-center gap-5 lg:flex-nowrap">
+          <article class="basis-full lg:basis-1/3 text-center py-5">
+            <h1 class="text-lg font-semibold opacity-50 cursor-wait">Code</h1>
           </article>
-        ))
-      }
-    </section>
-  </main>
+          <article class="basis-full lg:basis-1/3 text-center py-5">
+            <h1 class="text-lg font-semibold">
+              <a
+                href={photographyRoot}
+                class="inline-block relative overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] hover:text-[#FBFBFB] after:bg-[#606C38] after:transition-transform after:duration-200 after:translate-y-full hover:after:translate-y-0"
+              >
+                Photography
+              </a>
+            </h1>
+          </article>
+          <article class="basis-full lg:basis-1/3 text-center py-5">
+            <h1 class="text-lg font-semibold opacity-50 cursor-wait">
+              Generative Art
+            </h1>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <footer class="flex items-center justify-center py-5">
+      <span class="font-medium text-sm opacity-50">AM - 2025</span>
+    </footer>
+  </div>
 </Layout>

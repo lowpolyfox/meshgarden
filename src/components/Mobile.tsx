@@ -34,19 +34,26 @@ const Mobile = ({
     >
       <aside
         ref={menu}
-        className={`min-w-[85%] min-h-full max-h-screen absolute bg-slate-50 transition-[left] duration-300 ${menuOpen ? 'left-0' : 'left-[-85%]'}`}
+        className={`min-w-[85%] min-h-full max-h-screen absolute bg-[#606C38] transition-[left] duration-300 ${menuOpen ? 'left-0' : 'left-[-85%]'}`}
       >
         <div className="relative size-full overflow-y-auto scrollbar-none p-5">
-          <a className="absolute top-2.5 left-5" href={photographyRoot}>
+          <a
+            className="absolute top-2.5 left-5 text-[#FBFBFB] underline"
+            href={photographyRoot}
+          >
             go back
           </a>
           <button
-            className="absolute top-2.5 right-5"
+            className="absolute top-2.5 right-5 text-[#FBFBFB]"
             onClick={() => setMenuOpen(false)}
           >
             less
           </button>
-          <List containerClassName="pt-7" posts={posts} />
+          <List
+            containerClassName="pt-7"
+            itemClassName="text-[#FBFBFB]"
+            posts={posts}
+          />
         </div>
       </aside>
       <div
