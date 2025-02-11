@@ -4,6 +4,7 @@ import { debounce } from '../utils/debounce'
 import { formatMonthYear, richTextStyles } from '../utils/misc'
 import List from './List'
 import { photographyRoot } from '../routes'
+import { useIsMounted } from '../hooks/useIsMounted'
 
 const NAV_WIDTH_IN_PX = 200
 const VERTICAL_PADDING_IN_PX = 40
@@ -22,6 +23,7 @@ const DesktopGallery = ({
   const [photoHeight, setPhotoHeight] = useState(0)
   const [loadedImages, setLoadedImages] = useState<string[]>([])
   const isLoading = images.length !== loadedImages.length
+  const isMounted = useIsMounted()
 
   const calculatePhotoDimensions = () => {
     if (containerElement.current) {
@@ -89,7 +91,13 @@ const DesktopGallery = ({
               Photography
             </a>
           </h1>
-          <List posts={posts} />
+          <List
+            posts={posts}
+            animatedTextConfig={{
+              animationTrigger: isMounted && !isLoading,
+              delay: 150,
+            }}
+          />
         </div>
       </aside>
       <section
@@ -139,7 +147,7 @@ const DesktopGallery = ({
           </div>
         ))}
         <div
-          className={`absolute inset-0 size-full z-30 bg-white transition-opacity duration-300 
+          className={`absolute inset-0 size-full z-30 bg-white transition-opacity duration-200 
             ${isLoading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
           `}
         >

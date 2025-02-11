@@ -53,6 +53,7 @@ const Mobile = ({
             containerClassName="pt-7"
             itemClassName="text-[#FBFBFB]"
             posts={posts}
+            animatedTextConfig={{ animationTrigger: menuOpen, delay: 300 }}
           />
         </div>
       </aside>
