@@ -37,12 +37,12 @@ const AnimatedText = ({
 
   const Element = element
   return (
-    <Element className="flex flex-wrap whitespace-pre-wrap overflow-hidden">
+    <Element className="flex flex-wrap overflow-hidden whitespace-pre-wrap">
       {words.map((word, index) => {
         return (
           <span
             key={index}
-            className="block overflow-hidden will-change-transform transition-transform duration-[400ms] ease-out"
+            className="block overflow-hidden transition-transform duration-[400ms] ease-out will-change-transform"
             style={{
               transform: triggered ? 'translateY(0)' : 'translateY(100%)',
               ...(delay && { transitionDelay: `${delay}ms` }),

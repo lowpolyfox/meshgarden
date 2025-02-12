@@ -4,6 +4,7 @@ import { formatMonthYear, richTextStyles } from '../utils/misc'
 import List from './List'
 import { useOnClickOutside } from '../hooks/useOnClickOutside'
 import { photographyRoot } from '../routes'
+import { cn } from '../utils/cn'
 
 const Mobile = ({
   title,
@@ -30,13 +31,19 @@ const Mobile = ({
 
   return (
     <div
-      className={`relative w-full overflow-hidden ${menuOpen && 'max-h-screen'}`}
+      className={cn(
+        'relative w-full overflow-hidden',
+        menuOpen && 'max-h-screen',
+      )}
     >
       <aside
         ref={menu}
-        className={`min-w-[85%] min-h-full max-h-screen absolute bg-[#606C38] transition-[left] duration-300 ${menuOpen ? 'left-0' : 'left-[-85%]'}`}
+        className={cn(
+          'absolute max-h-screen min-h-full min-w-[85%] bg-[#606C38] transition-[left] duration-300',
+          menuOpen ? 'left-0' : 'left-[-85%]',
+        )}
       >
-        <div className="relative size-full overflow-y-auto scrollbar-none p-5">
+        <div className="scrollbar-none relative size-full overflow-y-auto p-5">
           <a
             className="absolute top-2.5 left-5 text-[#FBFBFB] underline"
             href={photographyRoot}
@@ -58,9 +65,12 @@ const Mobile = ({
         </div>
       </aside>
       <div
-        className={`relative min-w-screen transition-[left] duration-300 ${menuOpen ? 'left-[85%]' : 'left-0'}`}
+        className={cn(
+          'relative min-w-screen transition-[left] duration-300',
+          menuOpen ? 'left-[85%]' : 'left-0',
+        )}
       >
-        <div className="px-5 py-2.5 flex items-center justify-between">
+        <div className="flex items-center justify-between px-5 py-2.5">
           <h1 className="font-bold">
             <a href={photographyRoot}>Photography</a>
           </h1>
@@ -72,18 +82,18 @@ const Mobile = ({
             <h3 className="mb-2.5">
               {formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
             </h3>
-            <div className={richTextStyles}>{description}</div>
+            <div className={cn(richTextStyles)}>{description}</div>
           </header>
           <section className="relative">
             {images.map((img) => (
               <div
                 key={img.sys.id}
-                className="relative overflow-hidden aspect-[3/2] mb-5"
+                className="relative mb-5 aspect-[3/2] overflow-hidden"
               >
                 <img
                   src={String(img.fields.file?.url)}
                   alt={String(img.fields.title) ?? ''}
-                  className="absolute inset-0 size-full object-contain cursor-pointer"
+                  className="absolute inset-0 size-full cursor-pointer object-contain"
                   onLoad={() =>
                     setLoadedImages((loadedImages) => [
                       ...loadedImages,
@@ -94,9 +104,12 @@ const Mobile = ({
               </div>
             ))}
             <div
-              className={`fixed inset-0 size-full z-30 bg-white transition-opacity duration-500 
-            ${isLoading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-          `}
+              className={cn(
+                'fixed inset-0 z-30 size-full bg-white transition-opacity duration-500',
+                isLoading
+                  ? 'pointer-events-auto opacity-100'
+                  : 'pointer-events-none opacity-0',
+              )}
             >
               <div className="relative size-full">
                 <div className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2">

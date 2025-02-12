@@ -3,6 +3,7 @@ import type { Post } from '../lib/contentful'
 import { formatMonthYear } from '../utils/misc'
 import { photographyRoot } from '../routes'
 import AnimatedText, { type AnimatedTextProps } from './text/AnimatedText'
+import { cn } from '../utils/cn'
 
 interface Props {
   posts: Entry<Post>[]
@@ -35,16 +36,22 @@ const List = ({
             <li key={post.sys.id}>
               <a
                 href={`${photographyRoot}/${post.fields.slug}`}
-                className={`inline-block whitespace-nowrap mb-3 transition-opacity hover:opacity-75 ${itemClassName}`}
+                className={cn(
+                  'mb-3 inline-block whitespace-nowrap transition-opacity hover:opacity-75',
+                  itemClassName,
+                )}
               >
-                <span className={`${isActive ? 'font-semibold' : ''}`}>
+                <span className={cn(isActive && 'font-semibold')}>
                   <AnimatedText
                     text={String(post.fields.title)}
                     {...animatedTextConfig}
                   />
                 </span>
                 <span
-                  className={`block italic text-xs ${isActive ? 'font-medium' : ''}`}
+                  className={cn(
+                    'block text-xs italic',
+                    isActive && 'font-medium',
+                  )}
                 >
                   <AnimatedText
                     text={date}

@@ -3,7 +3,7 @@ import { type ReactNode } from 'react'
 import type { Post } from '../lib/contentful'
 import useIsMobile from '../hooks/useIsMobile'
 import DesktopGallery from './Desktop'
-import Mobile from './Mobile'
+import MobileGallery from './Mobile'
 import '../../src/styles/global.css'
 
 export interface GalleryProps {
@@ -17,12 +17,10 @@ const PhotoGallery = (props: GalleryProps) => {
   const { ready: deviceHasBeenDetermined, isMobile } = useIsMobile()
 
   if (!deviceHasBeenDetermined)
-    return (
-      <div className="w-screen h-screen max-w-full max-h-full bg-white"></div>
-    )
+    return <div className="h-screen max-h-full w-screen max-w-full bg-white" />
 
   if (isMobile) {
-    return <Mobile {...props} />
+    return <MobileGallery {...props} />
   }
   return <DesktopGallery {...props} />
 }

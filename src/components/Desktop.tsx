@@ -5,6 +5,7 @@ import { formatMonthYear, richTextStyles } from '../utils/misc'
 import List from './List'
 import { photographyRoot } from '../routes'
 import { useIsMounted } from '../hooks/useIsMounted'
+import { cn } from '../utils/cn'
 
 const NAV_WIDTH_IN_PX = 200
 const VERTICAL_PADDING_IN_PX = 40
@@ -75,17 +76,17 @@ const DesktopGallery = ({
   return (
     <div className="flex h-screen items-start justify-start">
       <aside
-        className="min-h-screen bg-white relative"
+        className="relative min-h-screen bg-white"
         style={{
           width: NAV_WIDTH_IN_PX,
           paddingTop: (window.innerHeight - photoHeight) / 2,
           paddingBottom: (window.innerHeight - photoHeight) / 2,
         }}
       >
-        <div className="absolute inset-5 max-h-full overflow-y-scroll scrollbar-none">
-          <h1 className="font-bold mb-4">
+        <div className="scrollbar-none absolute inset-5 max-h-full overflow-y-scroll">
+          <h1 className="mb-4 font-bold">
             <a
-              className="inline-block relative z-[1] overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] hover:text-[#FBFBFB] after:bg-[#606C38] after:transition-transform after:duration-200 after:translate-y-full hover:after:translate-y-0"
+              className="relative z-[1] inline-block overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] after:translate-y-full after:bg-[#606C38] after:transition-transform after:duration-200 hover:text-[#FBFBFB] hover:after:translate-y-0"
               href={photographyRoot}
             >
               Photography
@@ -101,16 +102,17 @@ const DesktopGallery = ({
         </div>
       </aside>
       <section
-        className={`relative h-full flex flex-1 items-center gap-5 mx-auto 
-          ${isLoading ? 'overflow-x-hidden' : 'overflow-x-scroll scrollbar-none'}
-        `}
+        className={cn(
+          'relative mx-auto flex h-full flex-1 items-center gap-5',
+          isLoading ? 'overflow-x-hidden' : 'scrollbar-none overflow-x-scroll',
+        )}
         ref={containerElement}
         style={{
           paddingRight: `${MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX}px`,
         }}
       >
         <div
-          className="min-w-[360px] h-full px-5"
+          className="h-full min-w-[360px] px-5"
           style={{
             paddingTop: (window.innerHeight - photoHeight) / 2,
             paddingBottom: (window.innerHeight - photoHeight) / 2,
@@ -120,7 +122,7 @@ const DesktopGallery = ({
           <h2 className="mb-3">
             {formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
           </h2>
-          <div className={richTextStyles}>{description}</div>
+          <div className={cn(richTextStyles)}>{description}</div>
         </div>
         {images.map((img) => (
           <div
@@ -135,7 +137,7 @@ const DesktopGallery = ({
             <img
               src={String(img.fields.file?.url)}
               alt={String(img.fields.title) ?? ''}
-              className="absolute inset-0 size-full object-contain cursor-pointer"
+              className="absolute inset-0 size-full cursor-pointer object-contain"
               onClick={handleImageClick}
               onLoad={() =>
                 setLoadedImages((loadedImages) => [
@@ -147,9 +149,12 @@ const DesktopGallery = ({
           </div>
         ))}
         <div
-          className={`absolute inset-0 size-full z-30 bg-white transition-opacity duration-200 
-            ${isLoading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-          `}
+          className={cn(
+            'absolute inset-0 z-30 size-full bg-white transition-opacity duration-200',
+            isLoading
+              ? 'pointer-events-auto opacity-100'
+              : 'pointer-events-none opacity-0',
+          )}
         >
           <div className="relative size-full">
             <div className="absolute top-1/2 left-1/2 w-[45px] -translate-x-1/2 -translate-y-1/2">
