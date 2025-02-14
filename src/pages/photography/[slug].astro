@@ -1,8 +1,10 @@
 ---
 import type { Asset, Entry } from 'contentful'
 import { contentfulClient, type Post } from '../../lib/contentful'
+import { BLOCKS, INLINES, type Inline } from '@contentful/rich-text-types'
 import PhotoGallery from '../../components/PhotoGallery'
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+
 import '../../../src/styles/global.css'
 
 export async function getStaticPaths() {
@@ -11,12 +13,20 @@ export async function getStaticPaths() {
     order: ['-fields.date'],
   })
 
+  const richTextRenderOptions = {
+    renderNode: {
+      [INLINES.HYPERLINK]: (node: any, next: any) => {
+        return `<a target="_blank" href=${node.data.uri}>${next(node.content)}</a>`
+      },
+    },
+  }
+
   const pages = posts.items.map((item) => ({
     params: { slug: item.fields.slug },
     props: {
       title: item.fields.title,
       date: new Date(String(item.fields.date)),
-      content: documentToHtmlString(item.fields.content),
+      content: documentToHtmlString(item.fields.content, richTextRenderOptions),
       images: item.fields.images as Asset[],
       posts: posts.items as Entry<Post>[],
     },
@@ -30,6 +40,7 @@ const { title, content } = Astro.props
 <html lang="en">
   <head>
     <title>{`${title} - Analog photography, AM`}</title>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Google tag (gtag.js) -->
     <script

@@ -8,8 +8,8 @@ import { useIsMounted } from '../hooks/useIsMounted'
 import { cn } from '../utils/cn'
 import AnimatedText from './text/AnimatedText'
 
-const NAV_WIDTH_IN_PX = 200
-const VERTICAL_PADDING_IN_PX = 40
+const NAV_WIDTH_IN_PX = 240
+const VERTICAL_PADDING_IN_PX = 30
 const MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX = 80
 const DEBOUNCE_TIMEOUT_IN_MS = 100
 
@@ -18,7 +18,7 @@ const DesktopGallery = ({
   date,
   images,
   posts,
-  children: description,
+  children: textBody,
 }: GalleryProps) => {
   const containerElement = useRef<HTMLDivElement>(null)
   const [photoWidth, setPhotoWidth] = useState(0)
@@ -84,19 +84,17 @@ const DesktopGallery = ({
           paddingBottom: (window.innerHeight - photoHeight) / 2,
         }}
       >
-        <div className="scrollbar-none absolute inset-5 max-h-full overflow-y-scroll">
-          <h1 className="mb-4 font-bold">
-            <a
-              className="relative z-[1] inline-block overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] after:translate-y-full after:bg-[#606C38] after:transition-transform after:duration-200 hover:text-[#FBFBFB] hover:after:translate-y-0"
-              href={photographyRoot}
-            >
-              <AnimatedText
-                text="Photography"
-                animationTrigger={isMounted && !isLoading}
-                delay={150}
-              />
-            </a>
-          </h1>
+        <div className="scrollbar-none max-h-full overflow-y-scroll px-5">
+          <a
+            className="relative z-[1] mb-4 inline-block overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] after:translate-y-full after:bg-[#606C38] after:transition-transform after:duration-200 hover:text-[#FBFBFB] hover:after:translate-y-0"
+            href={photographyRoot}
+          >
+            <AnimatedText
+              text="go back"
+              animationTrigger={isMounted && !isLoading}
+              delay={150}
+            />
+          </a>
           <List
             posts={posts}
             animatedTextConfig={{
@@ -117,34 +115,36 @@ const DesktopGallery = ({
         }}
       >
         <div
-          className="h-full min-w-[360px] px-5"
+          className="h-full min-w-[440px] px-5"
           style={{
             paddingTop: (window.innerHeight - photoHeight) / 2,
             paddingBottom: (window.innerHeight - photoHeight) / 2,
           }}
         >
-          <h1 className="text-3xl font-bold">
-            <AnimatedText
-              text={title}
-              animationTrigger={isMounted && !isLoading}
-              delay={150}
-            />
-          </h1>
-          <h2 className="text-md mb-3">
-            <AnimatedText
-              text={formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
-              animationTrigger={isMounted && !isLoading}
-              delay={150}
-            />
-          </h2>
-          <div
-            className={cn(
-              'opacity-0 transition-opacity delay-200 duration-400',
-              richTextStyles,
-              isMounted && !isLoading && 'opacity-100',
-            )}
-          >
-            {description}
+          <div className="scrollbar-none max-h-full overflow-y-scroll">
+            <h1 className="text-3xl font-bold">
+              <AnimatedText
+                text={title}
+                animationTrigger={isMounted && !isLoading}
+                delay={150}
+              />
+            </h1>
+            <h2 className="text-md mb-6">
+              <AnimatedText
+                text={formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
+                animationTrigger={isMounted && !isLoading}
+                delay={150}
+              />
+            </h2>
+            <div
+              className={cn(
+                'opacity-0 transition-opacity delay-300 duration-400',
+                richTextStyles,
+                isMounted && !isLoading && 'opacity-100',
+              )}
+            >
+              {textBody}
+            </div>
           </div>
         </div>
         {images.map((img) => (

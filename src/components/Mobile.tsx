@@ -5,13 +5,14 @@ import List from './List'
 import { useOnClickOutside } from '../hooks/useOnClickOutside'
 import { photographyRoot } from '../routes'
 import { cn } from '../utils/cn'
+import AnimatedText from './text/AnimatedText'
 
 const Mobile = ({
   title,
   date,
   images,
   posts,
-  children: description,
+  children: textBody,
 }: GalleryProps) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [loadedImages, setLoadedImages] = useState<string[]>([])
@@ -71,18 +72,36 @@ const Mobile = ({
         )}
       >
         <div className="flex items-center justify-between px-5 py-2.5">
-          <h1 className="font-bold">
+          <p className="font-bold">
             <a href={photographyRoot}>Photography</a>
-          </h1>
+          </p>
           <button onClick={() => setMenuOpen(true)}>more</button>
         </div>
         <div className="p-5 pb-0">
-          <header className="mb-5">
-            <h2 className="text-2xl font-bold">{title}</h2>
-            <h3 className="mb-2.5">
-              {formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
-            </h3>
-            <div className={cn(richTextStyles)}>{description}</div>
+          <header className="mb-6">
+            <h1 className="text-2xl font-bold">
+              <AnimatedText
+                text={title}
+                animationTrigger={!isLoading}
+                delay={300}
+              />
+            </h1>
+            <h2 className="mb-6">
+              <AnimatedText
+                text={formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
+                animationTrigger={!isLoading}
+                delay={300}
+              />
+            </h2>
+            <div
+              className={cn(
+                'opacity-0 transition-opacity delay-500 duration-400',
+                richTextStyles,
+                !isLoading && 'opacity-100',
+              )}
+            >
+              {textBody}
+            </div>
           </header>
           <section className="relative">
             {images.map((img) => (
@@ -105,7 +124,7 @@ const Mobile = ({
             ))}
             <div
               className={cn(
-                'fixed inset-0 z-30 size-full bg-white transition-opacity duration-500',
+                'fixed inset-0 z-30 size-full bg-white transition-opacity duration-400',
                 isLoading
                   ? 'pointer-events-auto opacity-100'
                   : 'pointer-events-none opacity-0',
