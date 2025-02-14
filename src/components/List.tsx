@@ -53,11 +53,7 @@ const List = ({
                     isActive && 'font-medium',
                   )}
                 >
-                  <AnimatedText
-                    text={date}
-                    delay={100}
-                    {...animatedTextConfig}
-                  />
+                  <AnimatedText text={date} {...animatedTextConfig} />
                 </span>
               </a>
             </li>
