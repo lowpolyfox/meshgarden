@@ -1,11 +1,10 @@
 ---
 import type { Asset, Entry } from 'contentful'
 import { contentfulClient, type Post } from '../../lib/contentful'
-import { BLOCKS, INLINES, type Inline } from '@contentful/rich-text-types'
-import PhotoGallery from '../../components/PhotoGallery'
+import { INLINES } from '@contentful/rich-text-types'
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
-
-import '../../../src/styles/global.css'
+import PhotoGallery from '../../components/PhotoGallery'
+import BaseHead from '../../components/BaseHead.astro'
 
 export async function getStaticPaths() {
   const posts = await contentfulClient.getEntries<Post>({
@@ -28,48 +27,36 @@ export async function getStaticPaths() {
       date: new Date(String(item.fields.date)),
       content: documentToHtmlString(item.fields.content, richTextRenderOptions),
       images: item.fields.images as Asset[],
+      thumbnail: item.fields.thumbnail as Asset,
       posts: posts.items as Entry<Post>[],
     },
   }))
   return pages
 }
 
-const { title, content } = Astro.props
+const { title, content, thumbnail } = Astro.props
 ---
 
 <html lang="en">
   <head>
-    <title>{`${title} - Analog photography, AM`}</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Google tag (gtag.js) -->
-    <script
-      type="text/partytown"
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-63C3W6XB4Z"></script>
-    <script type="text/partytown">
-      window.dataLayer = window.dataLayer || []
-      function gtag() {
-        dataLayer.push(arguments)
-      }
-      gtag('js', new Date())
-
-      gtag('config', 'G-63C3W6XB4Z')
-    </script>
+    <BaseHead
+      title={`${title} - Photography by Alan Maldonado`}
+      description="Analog photography"
+      image={String(thumbnail.fields.file?.url)}
+    />
     <style is:global>
       .loader {
-        height: 4px;
+        height: 6px;
         width: 150px;
         --line-bg: no-repeat linear-gradient(#000 0 0);
         background: var(--line-bg), var(--line-bg), #fff;
         background-size: 60% 100%;
-        animation: line-loader 5s infinite;
+        animation: line-loader 6s infinite;
         opacity: 0.75;
       }
 
       @media screen and (max-width: 1024px) {
         .loader {
-          height: 4px;
           width: 100%;
         }
       }

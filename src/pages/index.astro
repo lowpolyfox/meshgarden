@@ -2,16 +2,15 @@
 import Layout from '../layouts/Layout.astro'
 import { Icon } from 'astro-icon/components'
 import { photographyRoot } from '../routes'
-import '../styles/global.css'
 ---
 
 <Layout>
   <div
-    class="flex flex-col h-screen w-full mx-auto px-5 lg:px-0 lg:max-w-[91.66%]"
+    class="mx-auto flex h-screen w-full flex-col px-5 lg:max-w-[91.66%] lg:px-0"
   >
     <header class="flex items-center justify-between py-5 lg:py-8">
       <h1 class="font-medium">Alan Maldonado</h1>
-      <div class="flex items-center gap-4 ml-auto">
+      <div class="ml-auto flex items-center gap-4">
         <a
           href="https://www.instagram.com/meshcollider/"
           target="_blank"
@@ -23,29 +22,29 @@ import '../styles/global.css'
       </div>
     </header>
 
-    <main class="flex items-center justify-center basis-full h-full">
-      <section class="basis-full lg:basis-1/2 lg:max-w-[600px]">
-        <header class="text-center mb-6">
+    <main class="flex h-full basis-full items-center justify-center">
+      <section class="basis-full lg:max-w-[600px] lg:basis-1/2">
+        <header class="mb-6 text-center">
           <p class="mb-3">digital garden growing at a bit-measured pace</p>
-          <p class="font-bold leading-[1]">...</p>
+          <p class="leading-[1] font-bold">...</p>
         </header>
 
         <section class="flex flex-wrap items-center gap-5 lg:flex-nowrap">
-          <article class="basis-full lg:basis-1/3 text-center py-5">
-            <h1 class="text-lg font-semibold opacity-50 cursor-wait">Code</h1>
+          <article class="basis-full py-5 text-center lg:basis-1/3">
+            <h1 class="cursor-wait text-lg font-semibold opacity-50">Code</h1>
           </article>
-          <article class="basis-full lg:basis-1/3 text-center py-5">
+          <article class="basis-full py-5 text-center lg:basis-1/3">
             <h1 class="text-lg font-semibold">
               <a
                 href={photographyRoot}
-                class="inline-block relative overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] hover:text-[#FBFBFB] after:bg-[#606C38] after:transition-transform after:duration-200 after:translate-y-full hover:after:translate-y-0"
+                class="relative inline-block overflow-hidden px-0.5 transition-colors delay-[50] duration-200 after:absolute after:inset-0 after:z-[-1] after:translate-y-full after:bg-[#606C38] after:transition-transform after:duration-200 hover:text-[#FBFBFB] hover:after:translate-y-0"
               >
                 Photography
               </a>
             </h1>
           </article>
-          <article class="basis-full lg:basis-1/3 text-center py-5">
-            <h1 class="text-lg font-semibold opacity-50 cursor-wait">
+          <article class="basis-full py-5 text-center lg:basis-1/3">
+            <h1 class="cursor-wait text-lg font-semibold opacity-50">
               Generative Art
             </h1>
           </article>
@@ -54,7 +53,7 @@ import '../styles/global.css'
     </main>
 
     <footer class="flex items-center justify-center py-5">
-      <span class="font-medium text-sm opacity-50">AM - 2025</span>
+      <span class="text-sm font-medium opacity-50">AM - 2025</span>
     </footer>
   </div>
 </Layout>

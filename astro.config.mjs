@@ -6,8 +6,10 @@ import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
 import partytown from '@astrojs/partytown'
 import icon from 'astro-icon'
+import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
+  site: 'https://www.meshgarden.space/',
   integrations: [
     react(),
     partytown({
@@ -16,6 +18,7 @@ export default defineConfig({
       },
     }),
     icon(),
+    sitemap(),
   ],
 
   image: {

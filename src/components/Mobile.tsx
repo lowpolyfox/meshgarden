@@ -131,7 +131,7 @@ const Mobile = ({
               )}
             >
               <div className="relative size-full">
-                <div className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2">
+                <div className="absolute top-0 left-1/2 w-full -translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2">
                   <div className="loader" />
                 </div>
               </div>

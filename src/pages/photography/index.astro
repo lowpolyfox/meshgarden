@@ -6,7 +6,6 @@ import { type Asset } from 'contentful'
 import { Icon } from 'astro-icon/components'
 import { formatMonthYear } from '../../utils/misc'
 import { photographyRoot } from '../../routes'
-import '../../styles/global.css'
 
 const postEntries = await contentfulClient.getEntries<Post>({
   content_type: 'post',
@@ -24,7 +23,10 @@ const posts = postEntries.items.map((post) => {
 })
 ---
 
-<Layout>
+<Layout
+  title="Photograhy - Meshgarden"
+  description="Film and phone photography by Alan Maldonado"
+>
   <div class="mx-auto max-w-full px-5 lg:max-w-[91.66%] lg:px-0">
     <header class="flex items-center justify-between py-5 lg:py-8">
       <h1 class="text-2xl font-bold">Photography</h1>
