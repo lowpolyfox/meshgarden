@@ -11,12 +11,12 @@ type NonTextHTMLTags =
   | 'iframe'
   | 'embed'
   | 'object'
-type TextTags = Exclude<HTMLTags, NonTextHTMLTags>
+type HTMLTextTags = Exclude<HTMLTags, NonTextHTMLTags>
 
 export interface AnimatedTextProps {
   text: string
   delay?: number
-  element?: TextTags
+  element?: HTMLTextTags
   animationTrigger: boolean
 }
 
@@ -40,9 +40,8 @@ const AnimatedText = ({
     <Element className="flex flex-wrap overflow-hidden whitespace-pre-wrap">
       {words.map((word, index) => {
         return (
-          <span className="block overflow-hidden">
+          <span className="block overflow-hidden" key={index}>
             <span
-              key={index}
               className="block overflow-hidden transition-transform duration-[400ms] ease-out will-change-transform"
               style={{
                 transform: triggered ? 'translateY(0)' : 'translateY(100%)',

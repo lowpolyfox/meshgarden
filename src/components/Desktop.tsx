@@ -20,20 +20,21 @@ const DesktopGallery = ({
   posts,
   children: textBody,
 }: GalleryProps) => {
-  const containerElement = useRef<HTMLDivElement>(null)
-  const [photoWidth, setPhotoWidth] = useState(0)
-  const [photoHeight, setPhotoHeight] = useState(0)
+  const imagesContainerElement = useRef<HTMLDivElement>(null)
+  const [imageWidth, setImageWidth] = useState(0)
+  const [imageHeight, setImageHeight] = useState(0)
   const [loadedImages, setLoadedImages] = useState<string[]>([])
   const isLoading = images.length !== loadedImages.length
   const isMounted = useIsMounted()
+  const [defaultScrollBehavior, setDefaultScrollBehavior] = useState(true)
 
   const calculatePhotoDimensions = () => {
-    if (containerElement.current) {
+    if (imagesContainerElement.current) {
       const maxHeight = window.innerHeight - VERTICAL_PADDING_IN_PX
       const viewportWidth = window.innerWidth
 
       let width =
-        containerElement.current.offsetWidth -
+        imagesContainerElement.current.offsetWidth -
         MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX
       let height = (width * 2) / 3
 
@@ -47,8 +48,8 @@ const DesktopGallery = ({
         height = (width * 2) / 3
       }
 
-      setPhotoHeight(height)
-      setPhotoWidth(width)
+      setImageHeight(height)
+      setImageWidth(width)
     }
   }
 
@@ -63,6 +64,28 @@ const DesktopGallery = ({
       window.removeEventListener('resize', handleResize)
     }
   }, [])
+
+  useEffect(() => {
+    const imagesContainer = imagesContainerElement.current
+    const handleWheel = (e: WheelEvent) => {
+      if (defaultScrollBehavior && imagesContainer?.scrollLeft === 0) return
+
+      e.preventDefault()
+      if (imagesContainer) {
+        imagesContainer.scrollLeft += e.deltaY
+      }
+    }
+    if (imagesContainer) {
+      imagesContainer.addEventListener('wheel', handleWheel, {
+        passive: false,
+      })
+    }
+    return () => {
+      if (imagesContainer) {
+        imagesContainer.removeEventListener('wheel', handleWheel)
+      }
+    }
+  }, [defaultScrollBehavior])
 
   const handleImageClick = (event: MouseEvent<HTMLImageElement>) => {
     if (isLoading) return
@@ -80,8 +103,8 @@ const DesktopGallery = ({
         className="relative min-h-screen bg-white"
         style={{
           width: NAV_WIDTH_IN_PX,
-          paddingTop: (window.innerHeight - photoHeight) / 2,
-          paddingBottom: (window.innerHeight - photoHeight) / 2,
+          paddingTop: (window.innerHeight - imageHeight) / 2,
+          paddingBottom: (window.innerHeight - imageHeight) / 2,
         }}
       >
         <div className="scrollbar-none max-h-full overflow-y-scroll px-5">
@@ -105,11 +128,11 @@ const DesktopGallery = ({
         </div>
       </aside>
       <section
+        ref={imagesContainerElement}
         className={cn(
           'relative mx-auto flex h-full flex-1 items-center gap-5',
           isLoading ? 'overflow-x-hidden' : 'scrollbar-none overflow-x-scroll',
         )}
-        ref={containerElement}
         style={{
           paddingRight: `${MIN_NEXT_PHOTO_VISIBLE_PORTION_IN_PX}px`,
         }}
@@ -117,9 +140,11 @@ const DesktopGallery = ({
         <div
           className="h-full min-w-[440px] px-5"
           style={{
-            paddingTop: (window.innerHeight - photoHeight) / 2,
-            paddingBottom: (window.innerHeight - photoHeight) / 2,
+            paddingTop: (window.innerHeight - imageHeight) / 2,
+            paddingBottom: (window.innerHeight - imageHeight) / 2,
           }}
+          onMouseEnter={() => setDefaultScrollBehavior(true)}
+          onMouseLeave={() => setDefaultScrollBehavior(false)}
         >
           <div className="scrollbar-none max-h-full overflow-y-scroll">
             <h1 className="text-3xl font-bold">
@@ -147,15 +172,20 @@ const DesktopGallery = ({
             </div>
           </div>
         </div>
-        {images.map((img) => (
+        {images.map((img, index) => (
           <div
             key={img.sys.id}
             className="relative overflow-hidden"
             style={{
-              minWidth: `${photoWidth}px`,
-              width: `${photoWidth}px`,
-              height: `${photoHeight}px`,
+              minWidth: `${imageWidth}px`,
+              width: `${imageWidth}px`,
+              height: `${imageHeight}px`,
             }}
+            {...(index === 0 && {
+              onMouseEnter: () => {
+                setDefaultScrollBehavior(false)
+              },
+            })}
           >
             <img
               src={String(img.fields.file?.url)}
