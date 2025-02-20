@@ -20,13 +20,14 @@ const DesktopGallery = ({
   posts,
   children: textBody,
 }: GalleryProps) => {
+  const isMounted = useIsMounted()
   const imagesContainerElement = useRef<HTMLDivElement>(null)
   const [imageWidth, setImageWidth] = useState(0)
   const [imageHeight, setImageHeight] = useState(0)
   const [loadedImages, setLoadedImages] = useState<string[]>([])
   const isLoading = images.length !== loadedImages.length
-  const isMounted = useIsMounted()
   const [defaultScrollBehavior, setDefaultScrollBehavior] = useState(true)
+  const [portraitImages, setPortraitImages] = useState<number[]>([])
 
   const calculatePhotoDimensions = () => {
     if (imagesContainerElement.current) {
@@ -172,35 +173,43 @@ const DesktopGallery = ({
             </div>
           </div>
         </div>
-        {images.map((img, index) => (
-          <div
-            key={img.sys.id}
-            className="relative overflow-hidden"
-            style={{
-              minWidth: `${imageWidth}px`,
-              width: `${imageWidth}px`,
-              height: `${imageHeight}px`,
-            }}
-            {...(index === 0 && {
-              onMouseEnter: () => {
-                setDefaultScrollBehavior(false)
-              },
-            })}
-          >
-            <img
-              src={String(img.fields.file?.url)}
-              alt={String(img.fields.title) ?? ''}
-              className="absolute inset-0 size-full cursor-pointer object-contain"
-              onClick={handleImageClick}
-              onLoad={() =>
-                setLoadedImages((loadedImages) => [
-                  ...loadedImages,
-                  String(img.fields.file?.url),
-                ])
-              }
-            />
-          </div>
-        ))}
+        {images.map((img, index) => {
+          const isPortrait = portraitImages.includes(index)
+          return (
+            <div
+              key={img.sys.id}
+              className="relative overflow-hidden"
+              style={{
+                minWidth: `${isPortrait ? (imageHeight * 2) / 3 : imageWidth}px`,
+                width: `${isPortrait ? (imageHeight * 2) / 3 : imageWidth}px`,
+                height: `${imageHeight}px`,
+              }}
+              {...(index === 0 && {
+                onMouseEnter: () => {
+                  setDefaultScrollBehavior(false)
+                },
+              })}
+            >
+              <img
+                src={String(img.fields.file?.url)}
+                alt={String(img.fields.title) ?? ''}
+                className="absolute inset-0 size-full cursor-pointer object-contain"
+                onClick={handleImageClick}
+                onLoad={(e) => {
+                  const { naturalHeight, naturalWidth } = e.currentTarget
+
+                  if (naturalHeight > naturalWidth)
+                    setPortraitImages((pImages) => [...pImages, index])
+
+                  setLoadedImages((loadedImages) => [
+                    ...loadedImages,
+                    String(img.fields.file?.url),
+                  ])
+                }}
+              />
+            </div>
+          )
+        })}
         <div
           className={cn(
             'absolute inset-0 z-30 size-full bg-white transition-opacity duration-200',

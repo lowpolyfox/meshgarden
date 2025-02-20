@@ -16,6 +16,7 @@ const Mobile = ({
 }: GalleryProps) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [loadedImages, setLoadedImages] = useState<string[]>([])
+  const [portraitImages, setPortraitImages] = useState<number[]>([])
   const isLoading = images.length !== loadedImages.length
 
   const { ref: menu } = useOnClickOutside<HTMLDivElement>(() =>
@@ -104,24 +105,41 @@ const Mobile = ({
             </div>
           </header>
           <section className="relative">
-            {images.map((img) => (
-              <div
-                key={img.sys.id}
-                className="relative mb-5 aspect-[3/2] overflow-hidden"
-              >
-                <img
-                  src={String(img.fields.file?.url)}
-                  alt={String(img.fields.title) ?? ''}
-                  className="absolute inset-0 size-full cursor-pointer object-contain"
-                  onLoad={() =>
-                    setLoadedImages((loadedImages) => [
-                      ...loadedImages,
-                      String(img.fields.file?.url),
-                    ])
-                  }
-                />
-              </div>
-            ))}
+            {images.map((img, index) => {
+              const isPortrait = portraitImages.includes(index)
+              return (
+                <div
+                  key={img.sys.id}
+                  className={cn(
+                    'relative mb-5 overflow-hidden',
+                    isPortrait ? 'aspect-[2/3] max-w-[58.33%]' : 'aspect-[3/2]',
+                    isPortrait &&
+                      portraitImages.includes(index) &&
+                      (portraitImages.indexOf(index) === 0
+                        ? 'mr-auto'
+                        : portraitImages.indexOf(index) % 2 === 1
+                          ? 'ml-auto'
+                          : 'mr-auto'),
+                  )}
+                >
+                  <img
+                    src={String(img.fields.file?.url)}
+                    alt={String(img.fields.title) ?? ''}
+                    className="absolute inset-0 size-full cursor-pointer object-contain"
+                    onLoad={(e) => {
+                      const { naturalHeight, naturalWidth } = e.currentTarget
+                      if (naturalHeight > naturalWidth)
+                        setPortraitImages((pImages) => [...pImages, index])
+
+                      setLoadedImages((loadedImages) => [
+                        ...loadedImages,
+                        String(img.fields.file?.url),
+                      ])
+                    }}
+                  />
+                </div>
+              )
+            })}
             <div
               className={cn(
                 'fixed inset-0 z-30 size-full bg-white transition-opacity duration-400',
