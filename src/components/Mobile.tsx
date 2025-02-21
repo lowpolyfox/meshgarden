@@ -183,27 +183,42 @@ const Mobile = ({
               : 'animate-[fade-out_240ms_ease-in] opacity-0',
           )}
         >
-          <div className="relative flex size-full items-center">
+          <div className="relative flex size-full flex-col justify-center">
+            <div className="mb-auto w-full px-5 py-2.5">
+              <button
+                onClick={() =>
+                  setLightbox((prev) => ({ ...prev, open: false }))
+                }
+                disabled={isLoading}
+                className="float-right"
+              >
+                close
+              </button>
+            </div>
             <button
-              onClick={() => setLightbox((prev) => ({ ...prev, open: false }))}
-              disabled={isLoading}
-              className="absolute top-2.5 right-5"
-            >
-              close
-            </button>
-
-            <button
-              onClick={() => {
-                setLightbox((prev) => ({
-                  ...prev,
-                  imageIndex:
-                    lightbox.imageIndex !== images.length - 1
-                      ? lightbox.imageIndex + 1
-                      : 0,
-                  loading: true,
-                }))
+              onClick={(e) => {
+                if (e.pageX > window.innerWidth / 2) {
+                  setLightbox((prev) => ({
+                    ...prev,
+                    imageIndex:
+                      lightbox.imageIndex !== images.length - 1
+                        ? lightbox.imageIndex + 1
+                        : 0,
+                    loading: true,
+                  }))
+                } else {
+                  setLightbox((prev) => ({
+                    ...prev,
+                    imageIndex:
+                      lightbox.imageIndex !== 0
+                        ? lightbox.imageIndex - 1
+                        : images.length - 1,
+                    loading: true,
+                  }))
+                }
               }}
               disabled={lightbox.loading}
+              className="mb-auto size-full"
             >
               <img
                 src={String(images[lightbox.imageIndex].fields.file?.url)}
