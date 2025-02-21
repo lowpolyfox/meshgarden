@@ -54,13 +54,11 @@ const { title, content, thumbnail } = Astro.props
         animation: line-loader 6s infinite;
         opacity: 0.75;
       }
-
       @media screen and (max-width: 1024px) {
         .loader {
           width: 100%;
         }
       }
-
       @keyframes line-loader {
         0% {
           background-position:
@@ -76,6 +74,22 @@ const { title, content, thumbnail } = Astro.props
           background-position:
             250% 0,
             250% 0;
+        }
+      }
+      @keyframes fade-in {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 100;
+        }
+      }
+      @keyframes fade-out {
+        0% {
+          opacity: 100;
+        }
+        100% {
+          opacity: 0;
         }
       }
     </style>

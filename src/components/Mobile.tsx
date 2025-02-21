@@ -23,17 +23,28 @@ const Mobile = ({
     isMounted: isLoading,
     delayTimeInMs: 240,
   })
+
+  const [lightbox, setLightbox] = useState<{
+    open: boolean
+    imageIndex: number
+    loading?: boolean
+  }>({ open: false, imageIndex: -1 })
+  const shouldRenderLightbox = useDelayUnmount({
+    isMounted: lightbox.open,
+    delayTimeInMs: 240,
+  })
+
   const { ref: menu } = useOnClickOutside<HTMLDivElement>(() =>
     setMenuOpen(false),
   )
 
   useEffect(() => {
-    if (menuOpen || isLoading) {
+    if (menuOpen || lightbox.open || isLoading) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'scroll'
     }
-  }, [menuOpen, isLoading])
+  }, [menuOpen, lightbox.open, isLoading])
 
   return (
     <div
@@ -112,50 +123,99 @@ const Mobile = ({
           </header>
           <section
             className={cn(
-              'relative opacity-100 transition-opacity delay-480 duration-240',
+              'flex flex-col opacity-100 transition-opacity delay-480 duration-240',
               isLoading && 'opacity-0',
             )}
           >
             {images.map((img, index) => {
               const isPortrait = portraitImages.includes(index)
               return (
-                <div
+                <button
                   key={img.sys.id}
-                  className={cn(
-                    'relative mb-5 overflow-hidden',
-                    isPortrait ? 'aspect-[2/3] max-w-[58.33%]' : 'aspect-[3/2]',
-                    isPortrait &&
-                      portraitImages.includes(index) &&
-                      (portraitImages.indexOf(index) === 0
-                        ? 'mr-auto'
-                        : portraitImages.indexOf(index) % 2 === 1
-                          ? 'ml-auto'
-                          : 'mr-auto'),
-                  )}
+                  onClick={() =>
+                    setLightbox({
+                      open: true,
+                      imageIndex: index,
+                      loading: true,
+                    })
+                  }
                 >
                   <img
                     src={String(img.fields.file?.url)}
                     alt={String(img.fields.title) ?? ''}
-                    className="absolute inset-0 size-full cursor-pointer object-contain"
+                    className={cn(
+                      'mb-5',
+                      isPortrait
+                        ? 'aspect-[2/3] max-w-[58.33%]'
+                        : 'aspect-[3/2]',
+                      isPortrait &&
+                        (portraitImages.indexOf(index) === 0
+                          ? 'mr-auto'
+                          : portraitImages.indexOf(index) % 2 === 1
+                            ? 'ml-auto'
+                            : 'mr-auto'),
+                    )}
                     onLoad={(e) => {
                       const { naturalHeight, naturalWidth } = e.currentTarget
-                      if (naturalHeight > naturalWidth)
+                      if (naturalHeight > naturalWidth) {
                         setPortraitImages((pImages) =>
                           [...pImages, index].sort((a, b) => a - b),
                         )
-
+                      }
                       setLoadedImages((loadedImages) => [
                         ...loadedImages,
                         String(img.fields.file?.url),
                       ])
                     }}
                   />
-                </div>
+                </button>
               )
             })}
           </section>
         </div>
       </div>
+      {shouldRenderLightbox && (
+        <div
+          className={cn(
+            'fixed inset-0 z-30 size-full bg-white/80',
+            lightbox.open
+              ? 'animate-[fade-in_240ms_ease-in] backdrop-blur-md'
+              : 'animate-[fade-out_240ms_ease-in] opacity-0',
+          )}
+        >
+          <div className="relative flex size-full items-center">
+            <button
+              onClick={() => setLightbox((prev) => ({ ...prev, open: false }))}
+              disabled={isLoading}
+              className="absolute top-2.5 right-5"
+            >
+              close
+            </button>
+
+            <button
+              onClick={() => {
+                setLightbox((prev) => ({
+                  ...prev,
+                  imageIndex:
+                    lightbox.imageIndex !== images.length - 1
+                      ? lightbox.imageIndex + 1
+                      : 0,
+                  loading: true,
+                }))
+              }}
+              disabled={lightbox.loading}
+            >
+              <img
+                src={String(images[lightbox.imageIndex].fields.file?.url)}
+                alt={`${title} - image ${lightbox.imageIndex} of ${images.length}`}
+                onLoad={() => {
+                  setLightbox((prev) => ({ ...prev, loading: false }))
+                }}
+              />
+            </button>
+          </div>
+        </div>
+      )}
       {shouldRenderLoader && (
         <div
           className={cn(
