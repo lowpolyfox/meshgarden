@@ -42,7 +42,7 @@ const AnimatedText = ({
         return (
           <span className="block overflow-hidden" key={index}>
             <span
-              className="block overflow-hidden transition-transform duration-[400ms] ease-out will-change-transform"
+              className="block overflow-hidden transition-transform duration-240 ease-out will-change-transform"
               style={{
                 transform: triggered ? 'translateY(0)' : 'translateY(100%)',
                 ...(delay && { transitionDelay: `${delay}ms` }),

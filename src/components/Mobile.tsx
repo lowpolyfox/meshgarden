@@ -6,6 +6,7 @@ import { useOnClickOutside } from '../hooks/useOnClickOutside'
 import { photographyRoot } from '../routes'
 import { cn } from '../utils/cn'
 import AnimatedText from './text/AnimatedText'
+import useDelayUnmount from '../hooks/useDelayUnmount'
 
 const Mobile = ({
   title,
@@ -18,7 +19,10 @@ const Mobile = ({
   const [loadedImages, setLoadedImages] = useState<string[]>([])
   const [portraitImages, setPortraitImages] = useState<number[]>([])
   const isLoading = images.length !== loadedImages.length
-
+  const shouldRenderLoader = useDelayUnmount({
+    isMounted: isLoading,
+    delayTimeInMs: 240,
+  })
   const { ref: menu } = useOnClickOutside<HTMLDivElement>(() =>
     setMenuOpen(false),
   )
@@ -76,7 +80,9 @@ const Mobile = ({
           <p className="font-bold">
             <a href={photographyRoot}>Photography</a>
           </p>
-          <button onClick={() => setMenuOpen(true)}>more</button>
+          <button onClick={() => setMenuOpen(true)} disabled={isLoading}>
+            more
+          </button>
         </div>
         <div className="p-5 pb-0">
           <header className="mb-6">
@@ -84,27 +90,32 @@ const Mobile = ({
               <AnimatedText
                 text={title}
                 animationTrigger={!isLoading}
-                delay={300}
+                delay={240}
               />
             </h1>
             <h2 className="mb-6">
               <AnimatedText
                 text={formatMonthYear(date).replace(/(\w+)\s(\d+)/, '$1, $2')}
                 animationTrigger={!isLoading}
-                delay={300}
+                delay={240}
               />
             </h2>
             <div
               className={cn(
-                'opacity-0 transition-opacity delay-500 duration-400',
+                'opacity-100 transition-opacity delay-360 duration-240',
                 richTextStyles,
-                !isLoading && 'opacity-100',
+                isLoading && 'opacity-0',
               )}
             >
               {textBody}
             </div>
           </header>
-          <section className="relative">
+          <section
+            className={cn(
+              'relative opacity-100 transition-opacity delay-480 duration-240',
+              isLoading && 'opacity-0',
+            )}
+          >
             {images.map((img, index) => {
               const isPortrait = portraitImages.includes(index)
               return (
@@ -129,7 +140,9 @@ const Mobile = ({
                     onLoad={(e) => {
                       const { naturalHeight, naturalWidth } = e.currentTarget
                       if (naturalHeight > naturalWidth)
-                        setPortraitImages((pImages) => [...pImages, index])
+                        setPortraitImages((pImages) =>
+                          [...pImages, index].sort((a, b) => a - b),
+                        )
 
                       setLoadedImages((loadedImages) => [
                         ...loadedImages,
@@ -140,23 +153,23 @@ const Mobile = ({
                 </div>
               )
             })}
-            <div
-              className={cn(
-                'fixed inset-0 z-30 size-full bg-white transition-opacity duration-400',
-                isLoading
-                  ? 'pointer-events-auto opacity-100'
-                  : 'pointer-events-none opacity-0',
-              )}
-            >
-              <div className="relative size-full">
-                <div className="absolute top-0 left-1/2 w-full -translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2">
-                  <div className="loader" />
-                </div>
-              </div>
-            </div>
           </section>
         </div>
       </div>
+      {shouldRenderLoader && (
+        <div
+          className={cn(
+            'fixed inset-0 z-30 size-full bg-white transition-opacity duration-600',
+            isLoading ? 'opacity-100' : 'opacity-0',
+          )}
+        >
+          <div className="relative size-full">
+            <div className="absolute top-0 left-1/2 w-full -translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2">
+              <div className="loader" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

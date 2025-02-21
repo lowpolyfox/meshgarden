@@ -7,6 +7,7 @@ import { photographyRoot } from '../routes'
 import { useIsMounted } from '../hooks/useIsMounted'
 import { cn } from '../utils/cn'
 import AnimatedText from './text/AnimatedText'
+import useDelayUnmount from '../hooks/useDelayUnmount'
 
 const NAV_WIDTH_IN_PX = 240
 const VERTICAL_PADDING_IN_PX = 30
@@ -26,6 +27,10 @@ const DesktopGallery = ({
   const [imageHeight, setImageHeight] = useState(0)
   const [loadedImages, setLoadedImages] = useState<string[]>([])
   const isLoading = images.length !== loadedImages.length
+  const shouldRenderLoader = useDelayUnmount({
+    isMounted: isLoading,
+    delayTimeInMs: 500,
+  })
   const [defaultScrollBehavior, setDefaultScrollBehavior] = useState(true)
   const [portraitImages, setPortraitImages] = useState<number[]>([])
 
@@ -210,20 +215,20 @@ const DesktopGallery = ({
             </div>
           )
         })}
-        <div
-          className={cn(
-            'absolute inset-0 z-30 size-full bg-white transition-opacity duration-200',
-            isLoading
-              ? 'pointer-events-auto opacity-100'
-              : 'pointer-events-none opacity-0',
-          )}
-        >
-          <div className="relative size-full">
-            <div className="absolute top-1/2 left-1/2 w-[45px] -translate-x-1/2 -translate-y-1/2">
-              <div className="loader" />
+        {shouldRenderLoader && (
+          <div
+            className={cn(
+              'absolute inset-0 z-30 size-full bg-white transition-opacity duration-500',
+              isLoading ? 'opacity-100' : 'opacity-0',
+            )}
+          >
+            <div className="relative size-full">
+              <div className="absolute top-1/2 left-1/2 w-[45px] -translate-x-1/2 -translate-y-1/2">
+                <div className="loader" />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
     </div>
   )
